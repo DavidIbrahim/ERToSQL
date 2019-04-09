@@ -17,6 +17,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import java.io.IOException;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,22 +35,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        imageView= (ImageView)findViewById(R.id.image_view);
-       // bitmap = BitmapFactory.decodeResource(this.getResources(), R.raw.pic1);
 
 
-        Mat img = null;
-        try {
-            img = Utils.loadResource(this,R.raw.pic1, Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
-            Imgproc.threshold(img, img, 120, 255,Imgproc.THRESH_BINARY);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Bitmap bm = Bitmap.createBitmap(img.cols(), img.rows(),Bitmap.Config.ARGB_8888);
-        Utils.matToBitmap(img, bm);
-
-        imageView.setImageBitmap(bm);
 
 
 
