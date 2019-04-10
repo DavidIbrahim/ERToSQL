@@ -1,5 +1,6 @@
 package com.example.david.ertosql;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
@@ -20,36 +21,34 @@ import static org.opencv.imgproc.Imgproc.adaptiveThreshold;
 
 public class ImageProcessing {
 
-    ImageView img_view;
 
-    /**
-     *
-     */
-    public static Mat exampleOnUsingOpenCV(Mat img) {
-       // Mat img = null;
+    // this pic is the one used in testing
+    private final static  int  TEST_PIC_ID = R.raw.pic1;
 
-        // in general el resources leha 3laka be el activities bs ....7aga b3rdha le el user ... tmam ?
-        //wa 3lshan kda lazm ast5dmha gwa activity .... afrd 3aez ast5dmha bra ?? eshta lazm tdelha ae activity wa 5las
-        // a3mle load le el sora 3n tre2 el path
-        //Loading the OpenCV core library
-     /*   System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        //Instantiating the Imagecodecs class
-        Imgcodecs imageCodecs = new Imgcodecs();
-        //Reading the Image from the file
-        String file = "C:\\Users\\saras\\AndroidStudioProjects\\ERToSQL\\app\\src\\main\\res\\raw\\pic1.jpg";
-        img = imageCodecs.imread(file);
-*/      adaptiveThreshold(img, img, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, 10);
-       // Imgproc.threshold(img, img, 100, 255, Imgproc.THRESH_BINARY);
 
-         return img;
-       // Bitmap bm = Bitmap.createBitmap(img.cols(), img.rows(), Bitmap.Config.ARGB_8888);
-     //   Utils.matToBitmap(img, bm);
+    public static Bitmap exampleOnUsingOpenCV(Context context) {
+        Mat mat=null;
+
+        try {
+            // load the image in grey scale and save it in mat ..... change pic1 for different resource
+            mat = Utils.loadResource(context,TEST_PIC_ID ,  Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //apply thresholding on image
+        adaptiveThreshold(mat, mat, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, 10);
+
+        return convertToBitmap(mat);
 
     }
 
-
-    public static void main(String[] args) {
-
+    private static Bitmap convertToBitmap(Mat mat) {
+        Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(),Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(mat, bitmap);
+        return bitmap;
     }
+
+
 }
