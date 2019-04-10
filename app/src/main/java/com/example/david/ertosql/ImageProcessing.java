@@ -14,6 +14,10 @@ import org.opencv.imgproc.Imgproc;
 import java.io.File;
 import java.io.IOException;
 
+import static org.opencv.imgproc.Imgproc.ADAPTIVE_THRESH_MEAN_C;
+import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
+import static org.opencv.imgproc.Imgproc.adaptiveThreshold;
+
 public class ImageProcessing {
 
     ImageView img_view;
@@ -35,8 +39,8 @@ public class ImageProcessing {
         //Reading the Image from the file
         String file = "C:\\Users\\saras\\AndroidStudioProjects\\ERToSQL\\app\\src\\main\\res\\raw\\pic1.jpg";
         img = imageCodecs.imread(file);
-*/
-        Imgproc.threshold(img, img, 100, 255, Imgproc.THRESH_BINARY);
+*/      adaptiveThreshold(img, img, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, 20);
+       // Imgproc.threshold(img, img, 100, 255, Imgproc.THRESH_BINARY);
 
          return img;
        // Bitmap bm = Bitmap.createBitmap(img.cols(), img.rows(), Bitmap.Config.ARGB_8888);
