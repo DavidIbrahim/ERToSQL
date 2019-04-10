@@ -35,7 +35,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        imageView=(ImageView)findViewById(R.id.image_view);
+        Mat img=null;
 
+        try {
+            img = Utils.loadResource(this,R.raw.pic1, Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        img=ImageProcessing.exampleOnUsingOpenCV(img);
+        Bitmap bm = Bitmap.createBitmap(img.cols(), img.rows(),Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(img, bm);
+
+        imageView.setImageBitmap(bm);
 
 
 
