@@ -39,7 +39,7 @@ public class ImageProcessing {
         //Reading the Image from the file
         String file = "C:\\Users\\saras\\AndroidStudioProjects\\ERToSQL\\app\\src\\main\\res\\raw\\pic1.jpg";
         img = imageCodecs.imread(file);
-*/      adaptiveThreshold(img, img, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, 20);
+*/      adaptiveThreshold(img, img, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, 10);
        // Imgproc.threshold(img, img, 100, 255, Imgproc.THRESH_BINARY);
 
          return img;
