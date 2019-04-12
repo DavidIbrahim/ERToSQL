@@ -1,15 +1,21 @@
 package com.example.david.ertosql;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
+import android.util.SparseArray;
 import android.widget.ImageView;
 
 import com.example.david.ertosql.er.shapes.ERLine;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Core;
+import org.opencv.core.CvException;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -22,13 +28,14 @@ import static org.opencv.imgproc.Imgproc.ADAPTIVE_THRESH_MEAN_C;
 import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
 import static org.opencv.imgproc.Imgproc.adaptiveThreshold;
 
-public class ImageProcessing {
+public class ImageProcessing extends Activity {
 
 
     // this pic is the one used in testing
     private final static  int  TEST_PIC_ID = R.raw.pic1;
 
     private static Mat matPicTest ;
+
 
     public static Bitmap exampleOnUsingOpenCV(Context context) {
         Mat mat=loadTestPic(context );
@@ -51,12 +58,23 @@ public class ImageProcessing {
 
         return erLines;
     }
+    private String getStringFromImage(Mat mat){
+        StringBuilder sb = new StringBuilder();
+        Bitmap bitmap = convertToBitmap(mat);
+        TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+        if(!textRecognizer.isOperational()){
+            return "couldn't get Text!";
+        }
+        else{
+            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+            SparseArray<TextBlock> text = textRecognizer.detect(frame);
+            for (int i = 0; i < text.size(); i++){
+                TextBlock item = text.valueAt(i);
+                sb.append(item.getValue());
+            }
+        }
 
-    private static String getStringFromImage(Mat mat){
-        //todo Rameez
-
-
-        return "";
+        return sb.toString();
     }
 
 
