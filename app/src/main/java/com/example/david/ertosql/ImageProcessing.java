@@ -2,19 +2,16 @@ package com.example.david.ertosql;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Environment;
-import android.util.Log;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.widget.ImageView;
 
 import com.example.david.ertosql.er.shapes.ERLine;
 
 import org.opencv.android.Utils;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -25,26 +22,53 @@ import static org.opencv.imgproc.Imgproc.adaptiveThreshold;
 public class ImageProcessing {
 
 
-    // this pic is the one used in testing
-    private final static  int  TEST_PIC_ID = R.raw.pic1;
+    /**
+     * this variable holds all test pictures
+     * u can add new test pictures in raw folder and add their ids in this array so you can test them
+     */
+    private static int[] mTestPictures = {R.raw.pic1, R.raw.pic2};
 
-    private static Mat matPicTest ;
+    /**
+     * time of displaying the image of a single test
+     */
+    private final static int DURATION_OF_SINGLE_TEST_IN_MILLIS = 2000;
 
-    public static Bitmap exampleOnUsingOpenCV(Context context) {
-        Mat mat=loadTestPic(context );
+    /*
+     *
+     */
+    public static void testImageProcessing(final Context context, final ImageView imageView) {
+
+        new CountDownTimer(DURATION_OF_SINGLE_TEST_IN_MILLIS*(mTestPictures.length+1), DURATION_OF_SINGLE_TEST_IN_MILLIS) {
+            int i = 0;
+
+            public void onTick(long millisUntilFinished) {
+                int mTestPicture = mTestPictures[i];
+                Mat originalImage = loadTestPic(context, mTestPicture);
+                System.out.println(i);
+                //todo change exampleOnUsingOpenCV wz ur own method to test it
+                Mat convertedImageMat = exampleOnUsingOpenCV(originalImage);
+
+                imageView.setImageBitmap(convertToBitmap(convertedImageMat));
+                i++;
+            }
+
+            public void onFinish() {
+            }
+        }.start();
 
 
+    }
 
+    private static Mat exampleOnUsingOpenCV(Mat mat) {
         //apply thresholding on image
         adaptiveThreshold(mat, mat, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY, 15, 10);
 
-
-        return convertToBitmap(mat);
+        return mat;
 
     }
 
 
-    private static ArrayList<ERLine> getLines(Mat mat){
+    private static ArrayList<ERLine> getLines(Mat mat) {
         //todo kero   implement the method
         ArrayList<ERLine> erLines = null;
 
@@ -52,7 +76,7 @@ public class ImageProcessing {
         return erLines;
     }
 
-    private static String getStringFromImage(Mat mat){
+    private static String getStringFromImage(Mat mat) {
         //todo Rameez
 
 
@@ -60,14 +84,11 @@ public class ImageProcessing {
     }
 
 
-
-
-
-    private static Mat loadTestPic(Context context) {
+    private static Mat loadTestPic(Context context, int testPicID) {
         Mat mat = null;
         try {
             // load the image in grey scale and save it in mat ..... change pic1 for different resource
-            mat = Utils.loadResource(context,TEST_PIC_ID ,  Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+            mat = Utils.loadResource(context, testPicID, Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,7 +96,7 @@ public class ImageProcessing {
     }
 
     private static Bitmap convertToBitmap(Mat mat) {
-        Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(),Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(mat, bitmap);
         return bitmap;
     }

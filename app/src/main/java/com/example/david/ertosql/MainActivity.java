@@ -1,23 +1,16 @@
 package com.example.david.ertosql;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
-import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.LoaderCallbackInterface;
-import org.opencv.android.OpenCVLoader;
-import org.opencv.android.Utils;
-import org.opencv.core.CvType;
-import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
 
-import java.io.IOException;
-import java.util.Collections;
+import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.OpenCVLoader;
 
 public class MainActivity extends AppCompatActivity {
     /**
@@ -39,12 +32,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         if(TESTING) {
             setContentView(R.layout.activity_main_test);
-            ImageView imageView = (ImageView) findViewById(R.id.image_view);
+            final ImageView imageView = findViewById(R.id.test_image_view);
+            Button buttonStartTesting = findViewById(R.id.button_start_testing);
+            buttonStartTesting.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ImageProcessing.testImageProcessing(view.getContext(),imageView);
+                }
+            });
 
-            // image returned that needs to be shown ...
-            Bitmap bitmap = ImageProcessing.exampleOnUsingOpenCV(this);
 
-            imageView.setImageBitmap(bitmap);
         }
         else {
             setContentView(R.layout.activity_main);
@@ -53,5 +50,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 
 }
