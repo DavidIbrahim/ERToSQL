@@ -28,7 +28,11 @@ import static org.opencv.imgproc.Imgproc.ADAPTIVE_THRESH_MEAN_C;
 import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
 import static org.opencv.imgproc.Imgproc.adaptiveThreshold;
 
-public class ImageProcessing extends Activity {
+public class ImageProcessing  {
+    Context c;
+    public ImageProcessing(Context context) {
+        c = context;
+    }
 
 
     // this pic is the one used in testing
@@ -61,7 +65,7 @@ public class ImageProcessing extends Activity {
     private String getStringFromImage(Mat mat){
         StringBuilder sb = new StringBuilder();
         Bitmap bitmap = convertToBitmap(mat);
-        TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+        TextRecognizer textRecognizer = new TextRecognizer.Builder(c).build();
         if(!textRecognizer.isOperational()){
             return "couldn't get Text!";
         }
