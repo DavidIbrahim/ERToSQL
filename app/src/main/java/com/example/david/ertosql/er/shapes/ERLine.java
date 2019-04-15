@@ -19,4 +19,12 @@ public class ERLine implements ERShape {
 
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "ERLine{" +
+                "p1=" + p1 +
+                ", p2=" + p2 +
+                '}';
+    }
 }

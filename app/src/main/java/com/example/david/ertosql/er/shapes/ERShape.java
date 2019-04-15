@@ -13,6 +13,14 @@ public interface ERShape {
             this.x = x;
             this.y = y;
         }
+
+        @Override
+        public String toString() {
+            return "ERPoint{" +
+                    "x=" + x +
+                    ", y=" + y +
+                    '}';
+        }
     }
     public class ERShapeWZCenter implements ERShape{
 
