@@ -37,7 +37,7 @@ import static org.opencv.imgproc.Imgproc.adaptiveThreshold;
 
 public class ImageProcessing {
 
-
+    private final static String IMAGE_PROCESSING_TAG = ImageProcessing.class.getName();
     /**
      * this variable holds all test pictures
      * u can add new test pictures in raw folder and add their ids in this array so you can test them
@@ -52,26 +52,40 @@ public class ImageProcessing {
     /*
      *
      */
+    private final static boolean TEST_A_METHOD_RETURNS_IMAGE = false;
+
+
+    /**
+     *  a function that loads test images and test them automatically
+     * @param context
+     * @param imageView
+     */
     public static void testImageProcessing(final Context context, final ImageView imageView) {
+            new CountDownTimer(DURATION_OF_SINGLE_TEST_IN_MILLIS * (mTestPictures.length + 1), DURATION_OF_SINGLE_TEST_IN_MILLIS) {
+                int i = 0;
 
-        new CountDownTimer(DURATION_OF_SINGLE_TEST_IN_MILLIS*(mTestPictures.length+1), DURATION_OF_SINGLE_TEST_IN_MILLIS) {
-            int i = 0;
+                public void onTick(long millisUntilFinished) {
+                    int mTestPicture = mTestPictures[i];
+                    Mat originalImage = loadTestPic(context, mTestPicture);
+                    System.out.println(i);
+                    if(TEST_A_METHOD_RETURNS_IMAGE) {
+                        //todo change exampleOnUsingOpenCV wz ur own method if it returns a pic to test it
 
-            public void onTick(long millisUntilFinished) {
-                int mTestPicture = mTestPictures[i];
-                Mat originalImage = loadTestPic(context, mTestPicture);
-                System.out.println(i);
-                //todo change exampleOnUsingOpenCV wz ur own method to test it
-                Mat convertedImageMat =exampleOnUsingOpenCV(originalImage);
+                        Mat convertedImageMat = exampleOnUsingOpenCV(originalImage);
+                        imageView.setImageBitmap(convertToBitmap(convertedImageMat));
+                    }
+                    else {
+                        //todo test ur own code here if it doesn't return an image
+                        //this is an example
+                        ArrayList<ERLine> lines = getLines(originalImage);
+                        Log.d(IMAGE_PROCESSING_TAG,"Testing with Image : "+i+ '\n'+lines.toString());
+                    }
+                    i++;
+                }
 
-
-                imageView.setImageBitmap(convertToBitmap(convertedImageMat));
-                i++;
-            }
-
-            public void onFinish() {
-            }
-        }.start();
+                public void onFinish() {
+                }
+            }.start();
 
 
     }
@@ -157,7 +171,8 @@ public class ImageProcessing {
 
     private static ArrayList<ERLine> getLines(Mat mat) {
         //todo kero   implement the method
-        ArrayList<ERLine> erLines = null;
+        ArrayList<ERLine> erLines = new ArrayList<ERLine>();
+        erLines.add(new ERLine(new ERShape.ERPoint(2,2),new ERShape.ERPoint(3,4)));
 
 
         return erLines;
