@@ -3,7 +3,6 @@ package com.example.david.ertosql;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -42,7 +41,7 @@ public class ImageProcessing {
      * this variable holds all test pictures
      * u can add new test pictures in raw folder and add their ids in this array so you can test them
      */
-    private static int[] mTestPictures = {R.raw.pic1, R.raw.pic2};
+    private static int[] mTestPictures = {R.raw.pic1, R.raw.pic2,R.raw.pic3,R.raw.pic4};
 
     /**
      * time of displaying the image of a single test
@@ -56,36 +55,37 @@ public class ImageProcessing {
 
 
     /**
-     *  a function that loads test images and test them automatically
+     * a function that loads test images and test them automatically
+     *
      * @param context
      * @param imageView
      */
     public static void testImageProcessing(final Context context, final ImageView imageView) {
-            new CountDownTimer(DURATION_OF_SINGLE_TEST_IN_MILLIS * (mTestPictures.length + 1), DURATION_OF_SINGLE_TEST_IN_MILLIS) {
-                int i = 0;
+        new CountDownTimer(DURATION_OF_SINGLE_TEST_IN_MILLIS * (mTestPictures.length + 1), DURATION_OF_SINGLE_TEST_IN_MILLIS) {
+            int i = 0;
 
-                public void onTick(long millisUntilFinished) {
-                    int mTestPicture = mTestPictures[i];
-                    Mat originalImage = loadTestPic(context, mTestPicture);
-                    System.out.println(i);
-                    if(TEST_A_METHOD_RETURNS_IMAGE) {
-                        //todo change exampleOnUsingOpenCV wz ur own method if it returns a pic to test it
+            public void onTick(long millisUntilFinished) {
+                int mTestPicture = mTestPictures[i];
+                Mat originalImage = loadTestPic(context, mTestPicture);
+                System.out.println(i);
+                if (TEST_A_METHOD_RETURNS_IMAGE) {
+                    //todo change exampleOnUsingOpenCV wz ur own method if it returns a pic to test it
 
-                        Mat convertedImageMat = exampleOnUsingOpenCV(originalImage);
-                        imageView.setImageBitmap(convertToBitmap(convertedImageMat));
-                    }
-                    else {
-                        //todo test ur own code here if it doesn't return an image
-                        //this is an example
-                        ArrayList<ERLine> lines = getLines(originalImage);
-                        Log.d(IMAGE_PROCESSING_TAG,"Testing with Image : "+i+ '\n'+lines.toString());
-                    }
-                    i++;
+                    Mat convertedImageMat = exampleOnUsingOpenCV(originalImage);
+                    imageView.setImageBitmap(convertToBitmap(convertedImageMat));
+                } else {
+                    //todo test ur own code here if it doesn't return an image
+                    //this is an example
+                    ArrayList<ERRectangle> lines = getRectangles(originalImage);
+                    Log.d(IMAGE_PROCESSING_TAG, "Testing with Image : " + i + '\n' + lines.toString());
+                    imageView.setImageBitmap(convertToBitmap(originalImage));
                 }
+                i++;
+            }
 
-                public void onFinish() {
-                }
-            }.start();
+            public void onFinish() {
+            }
+        }.start();
 
 
     }
@@ -99,80 +99,82 @@ public class ImageProcessing {
     }
 
     /**
-     *
      * @param mat
-     * @return array list contain ERReactangle
+     * @return array list contain ERReactangle of the image
      */
-    private static ArrayList<ERRectangle> getRectangles(Mat mat){
+    private static ArrayList<ERRectangle> getRectangles(Mat mat) {
         //copy image
-        Mat img=mat.clone();
-        ArrayList<ERRectangle> erRectangles=new ArrayList<>();
+
+       // Mat img = mat.clone();
+       Mat img = mat;
+        ArrayList<ERRectangle> erRectangles = new ArrayList<>();
 
         //make threshold
-         adaptiveThreshold(img, img, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV, 15, 8);
+        adaptiveThreshold(img, img, 255, ADAPTIVE_THRESH_MEAN_C, THRESH_BINARY_INV, 15, 8);
 
         //copy the image
-        Mat orig=img.clone();
+        Mat orig = img.clone();
 
         //dilation to get the shapes
-        Mat Kernel = new Mat(new Size(7, 7), CvType.CV_8U, new Scalar(255));
-        Imgproc.dilate(img,img,Kernel);
+        Mat Kernel = new Mat(new Size(8, 8), CvType.CV_8U, new Scalar(255));
+        Imgproc.dilate(img, img, Kernel);
 
         //contour all shapes in image and fill it with white color
         List<MatOfPoint> contours = new ArrayList<>();
-        Scalar white = new Scalar(255, 255, 255);
+        Scalar white= new Scalar(255, 255, 255);
         Imgproc.findContours(img, contours, new Mat(), Imgproc.CV_SHAPE_RECT, Imgproc.CHAIN_APPROX_NONE);
-        Imgproc.fillPoly(img,contours,white);
-
+        Imgproc.fillPoly(img, contours, white);
+       // Imgproc.erode(img, img, Kernel);
 
         //make morph open using rectangle kernel
+        Mat img1=new Mat();
         Mat kernel = Imgproc.getStructuringElement(MORPH_RECT, new Size(50, 20));
-        Imgproc.morphologyEx(img, img, MORPH_OPEN, kernel);
+        Imgproc.morphologyEx(img, img1, MORPH_OPEN, kernel);
 
         //contour after changes
         List<MatOfPoint> contour = new ArrayList<>();
-        Imgproc.findContours(img, contour, new Mat(), Imgproc.CV_SHAPE_RECT, Imgproc.CHAIN_APPROX_NONE);
+        Imgproc.findContours(img1, contour, new Mat(), Imgproc.CV_SHAPE_RECT, Imgproc.CHAIN_APPROX_NONE);
         // Log.d("getttpoint", String.valueOf(contour.size()));
         Scalar black = new Scalar(0, 190, 0);
         MatOfPoint2f approxCurve = new MatOfPoint2f();
-        Mat cut=null;
+        Mat cut = null;
         for (MatOfPoint cnt : contour) {
 
             MatOfPoint2f curve = new MatOfPoint2f(cnt.toArray());
 
-            Imgproc.approxPolyDP(curve, approxCurve, 0.01 * Imgproc.arcLength(curve, true), true);
+            Imgproc.approxPolyDP(curve, approxCurve, 0.015 * Imgproc.arcLength(curve, true), true);
 
             int numberVertices = (int) approxCurve.total();
 
             //Rectangle detected
-            if (numberVertices == 4 ) {
-                Rect rec= Imgproc.boundingRect(cnt);
-                if(rec.x==0||rec.y==0)
-                    continue;
-                Point p=new Point(rec.x+(rec.width/2),rec.y+(rec.height/2));
+            if (numberVertices == 4) {
+                Rect rec = Imgproc.boundingRect(cnt);
 
-                cut=orig.submat(rec);
-                ERShape.ERPoint center=new ERShape.ERPoint(rec.x+(rec.width/2),rec.y+(rec.height/2));
-               // Imgproc.putText(orig,"sara",p,2,2,green,2);
+                Point p = new Point(rec.x + (rec.width / 2), rec.y + (rec.height / 2));
+
+                cut = orig.submat(rec);
+                ERShape.ERPoint center = new ERShape.ERPoint(rec.x + (rec.width / 2), rec.y + (rec.height / 2));
+
                 //  String text=getStringFromImage(cut)
-                String text="sara";
-                ERRectangle e=new ERRectangle(center,text);
+                String text = "sara";
+                ERRectangle e = new ERRectangle(center, text);
                 erRectangles.add(e);
                 //erRectangles.add(e);
                 Log.d("getttpoint", String.valueOf(e.getCenter().x));
-
-                Imgproc.fillPoly(img, Collections.singletonList(cnt),black);
+                //
+                Imgproc.fillPoly(img, Collections.singletonList(cnt), black);
+               // Imgproc.putText(img,"sara",p,2,2,white,2);
             }
 
         }
-
+        Imgproc.erode(img, img, Kernel);
         return erRectangles;
     }
 
     private static ArrayList<ERLine> getLines(Mat mat) {
         //todo kero   implement the method
         ArrayList<ERLine> erLines = new ArrayList<ERLine>();
-        erLines.add(new ERLine(new ERShape.ERPoint(2,2),new ERShape.ERPoint(3,4)));
+        erLines.add(new ERLine(new ERShape.ERPoint(2, 2), new ERShape.ERPoint(3, 4)));
 
 
         return erLines;
@@ -202,6 +204,21 @@ public class ImageProcessing {
         Utils.matToBitmap(mat, bitmap);
         return bitmap;
     }
+
+    private static ArrayList<ERShape> extractAllShapes(Mat originalImage) {
+        ArrayList<ERShape> erShapes = new ArrayList<>();
+        ArrayList<ERRectangle> rectangleArrayList = getRectangles(originalImage);
+
+
+
+        return erShapes;
+    }
+
+
+    /**
+     *  custom class
+     */
+
 
 
 }
