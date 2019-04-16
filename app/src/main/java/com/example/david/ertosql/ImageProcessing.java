@@ -6,6 +6,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.example.david.ertosql.er.shapes.ERElipse;
 import com.example.david.ertosql.er.shapes.ERLine;
 import com.example.david.ertosql.er.shapes.ERRectangle;
 import com.example.david.ertosql.er.shapes.ERShape;
@@ -28,6 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.opencv.imgproc.Imgproc.ADAPTIVE_THRESH_MEAN_C;
+import static org.opencv.imgproc.Imgproc.MORPH_CLOSE;
 import static org.opencv.imgproc.Imgproc.MORPH_OPEN;
 import static org.opencv.imgproc.Imgproc.MORPH_RECT;
 import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
@@ -76,7 +78,9 @@ public class ImageProcessing {
                 } else {
                     //todo test ur own code here if it doesn't return an image
                     //this is an example
+                    Mat copy_original=originalImage.clone();
                     ArrayList<ERRectangle> lines = getRectangles(originalImage);
+                    ArrayList<ERElipse> elipses=getEllipse(copy_original,originalImage);
                     Log.d(IMAGE_PROCESSING_TAG, "Testing with Image : " + i + '\n' + lines.toString());
                     imageView.setImageBitmap(convertToBitmap(originalImage));
                 }
@@ -171,6 +175,18 @@ public class ImageProcessing {
         return erRectangles;
     }
 
+    private static ArrayList<ERElipse> getEllipse(Mat orig,Mat mat)
+    {
+
+        Mat img=mat.clone();
+
+        ArrayList<ERElipse> erElipses=new ArrayList<>();
+        Mat kernel=Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE,new Size(10,10));
+       // Imgproc.morphologyEx(img, img, MORPH_OPEN, kernel);
+      //  Imgproc.morphologyEx(img,img, MORPH_CLOSE, kernel);
+        return erElipses;
+    }
+
     private static ArrayList<ERLine> getLines(Mat mat) {
         //todo kero   implement the method
         ArrayList<ERLine> erLines = new ArrayList<ERLine>();
@@ -179,6 +195,7 @@ public class ImageProcessing {
 
         return erLines;
     }
+
 
     private static String getStringFromImage(Mat mat) {
         //todo Rameez
