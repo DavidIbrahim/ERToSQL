@@ -29,8 +29,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.opencv.imgproc.Imgproc.ADAPTIVE_THRESH_MEAN_C;
-import static org.opencv.imgproc.Imgproc.MORPH_CLOSE;
-import static org.opencv.imgproc.Imgproc.MORPH_OPEN;
+    import static org.opencv.imgproc.Imgproc.MORPH_OPEN;
 import static org.opencv.imgproc.Imgproc.MORPH_RECT;
 import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
 import static org.opencv.imgproc.Imgproc.THRESH_BINARY_INV;
@@ -38,12 +37,12 @@ import static org.opencv.imgproc.Imgproc.adaptiveThreshold;
 
 public class ImageProcessing {
 
-    private final static String IMAGE_PROCESSING_TAG = ImageProcessing.class.getName();
+    private final static String IMAGE_PROCESSING_TAG = ImageProcessing.class.getSimpleName();
     /**
      * this variable holds all test pictures
      * u can add new test pictures in raw folder and add their ids in this array so you can test them
      */
-    private static int[] mTestPictures = {R.raw.pic1, R.raw.pic2,R.raw.pic3,R.raw.pic4};
+    public static int[] mTestPictures = {R.raw.pic1, R.raw.pic2,R.raw.pic3,R.raw.pic4};
 
     /**
      * time of displaying the image of a single test
@@ -106,7 +105,7 @@ public class ImageProcessing {
      * @param mat
      * @return array list contain ERReactangle of the image
      */
-    private static ArrayList<ERRectangle> getRectangles(Mat mat) {
+    public static ArrayList<ERRectangle> getRectangles(Mat mat) {
         //copy image
 
        // Mat img = mat.clone();
@@ -205,7 +204,7 @@ public class ImageProcessing {
     }
 
 
-    private static Mat loadTestPic(Context context, int testPicID) {
+    public static Mat loadTestPic(Context context, int testPicID) {
         Mat mat = null;
         try {
             // load the image in grey scale and save it in mat ..... change pic1 for different resource
@@ -231,10 +230,6 @@ public class ImageProcessing {
         return erShapes;
     }
 
-
-    /**
-     *  custom class
-     */
 
 
 
