@@ -13,6 +13,23 @@ public interface ERShape {
             this.x = x;
             this.y = y;
         }
+
+        @Override
+        public String toString() {
+            return "ERPoint{" +
+                    "x=" + x +
+                    ", y=" + y +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if(this == obj) return true;//if both of them points the same address in memory
+
+            if(!(obj instanceof ERPoint)) return false; // if "that" is not a People or a childclass
+
+            return this.x == ((ERPoint) obj).x && this.y == ((ERPoint) obj).y;
+        }
     }
     public class ERShapeWZCenter implements ERShape{
 
