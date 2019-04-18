@@ -4,9 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.SparseArray;
 import android.widget.ImageView;
 
 import com.example.david.ertosql.er.shapes.ERLine;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.text.TextBlock;
+import com.google.android.gms.vision.text.TextRecognizer;
 
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -20,6 +24,7 @@ import static org.opencv.imgproc.Imgproc.THRESH_BINARY;
 import static org.opencv.imgproc.Imgproc.adaptiveThreshold;
 
 public class ImageProcessing {
+
 
 
     /**
@@ -76,13 +81,24 @@ public class ImageProcessing {
         return erLines;
     }
 
-    private static String getStringFromImage(Mat mat) {
-        //todo Rameez
+    private String getStringFromImage(Mat mat, Context c) {
+        StringBuilder sb = new StringBuilder();
+        Bitmap bitmap = convertToBitmap(mat);
+        TextRecognizer textRecognizer = new TextRecognizer.Builder(c).build();
+        if(!textRecognizer.isOperational()){
+            return "couldn't get Text!";
+        }
+        else{
+            Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+            SparseArray<TextBlock> text = textRecognizer.detect(frame);
+            for (int i = 0; i < text.size(); i++){
+                TextBlock item = text.valueAt(i);
+                sb.append(item.getValue());
+            }
+        }
 
-
-        return "";
+        return sb.toString();
     }
-
 
     private static Mat loadTestPic(Context context, int testPicID) {
         Mat mat = null;
