@@ -1,22 +1,33 @@
 package com.example.david.ertosql;
 
-import android.graphics.Bitmap;
+import android.Manifest;
+import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
-import org.opencv.android.CameraBridgeViewBase;
+import com.example.david.ertosql.cameraAndImages.OpenCVCamera;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+
 import org.opencv.android.OpenCVLoader;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     /**
      *  True for testing ImageProcessing class only
      */
-    private static final boolean  TESTING = true;
+    private static final boolean  TESTING = false;
     private static final String TAG= MainActivity.class.getSimpleName();
 
     static {
@@ -45,6 +56,30 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             setContentView(R.layout.activity_main);
+            Dexter.withActivity(this)
+                    .withPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                    .withListener(new MultiplePermissionsListener() {
+                @Override
+                public void onPermissionsChecked(MultiplePermissionsReport report) {
+                    if(!report.areAllPermissionsGranted()){
+                        Toast.makeText(MainActivity.this, "You need to grant all permission to use this app features", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+
+                }
+            }).check();
+            FloatingActionButton startButton = findViewById(R.id.start_button);
+            startButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent cvIntent = new Intent(MainActivity.this, OpenCVCamera.class);
+                    startActivity(cvIntent);
+                }
+            });
+
         }
 
 
