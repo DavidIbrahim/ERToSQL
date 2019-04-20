@@ -228,7 +228,7 @@ public class ImageProcessing {
 
         Mat img=new Mat();
         ArrayList<ERElipse> erElipses=new ArrayList<>();
-        Mat kernel=Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE,new Size(15,15));
+        Mat kernel=Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE,new Size(10,10));
         Imgproc.morphologyEx(mat, img, MORPH_OPEN, kernel);
 
         Mat la=new Mat();
@@ -247,7 +247,7 @@ public class ImageProcessing {
 
 
             int numberVertices = (int) approxCurve.total();
-            if(numberVertices>8&&contourArea(cnt)>2000) {
+            if(numberVertices>8&&contourArea(cnt)>200) {
                 Rect rec = Imgproc.boundingRect(cnt);
                 cut = orig.submat(rec);
                 boolean check=there_is_line(cut);
@@ -259,8 +259,8 @@ public class ImageProcessing {
                 Imgproc.fillPoly(img, Collections.singletonList(cnt), new Scalar(0, 0, 0));
                 count++;
                 c.add(cnt);
-                if(check)
-                  putText(mat,"c",new Point(rec.x +(rec.width / 2), rec.y + (rec.height / 2)),2,2,new Scalar(200,200,200),4);
+               // if(check)
+                //  putText(mat,"c",new Point(rec.x +(rec.width / 2), rec.y + (rec.height / 2)),2,2,new Scalar(200,200,200),4);
             }
         }
         for (int j=0;j<c.size();j++){
@@ -291,7 +291,7 @@ public class ImageProcessing {
 
 
             int numberVertices = (int) approxCurve.total();
-            if(numberVertices>3&&numberVertices<9&&Imgproc.contourArea(cnt)>2000) {
+            if(numberVertices>3&&numberVertices<9&&Imgproc.contourArea(cnt)>200) {
                 Rect rec = Imgproc.boundingRect(cnt);
                 cut = orig.submat(rec);
 
