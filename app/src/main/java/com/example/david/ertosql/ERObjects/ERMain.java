@@ -1,5 +1,7 @@
 package com.example.david.ertosql.ERObjects;
 
+import com.example.david.ertosql.RSMapper;
+
 import java.util.ArrayList;
 
 public class ERMain {
@@ -32,8 +34,14 @@ public class ERMain {
         EREntity E1 = new EREntity("Employee", keys1, attributes1);
         EREntity E2 = new EREntity("Department", keys2, attributes2);
 
-        EROneToOneRelationship R1 = new EROneToOneRelationship("Has",E1,E2,EROneToOneRelationship.Participation.TOTAL_PARTIAL);
+        EROneToOneRelationship R1 = new EROneToOneRelationship("Has",E1,E2,EROneToOneRelationship.Participation.TOTAL_TOTAL);
 
-        System.out.println(R1);
+        //System.out.println(R1);
+
+        ERDiagram D1 = new ERDiagram("Diagram 1", R1);
+        RSMapper rsMapper = new RSMapper(D1);
+        ArrayList<ERRelationalSchema> relationalSchema = rsMapper.getRelationalSchemas();
+
+        System.out.println(relationalSchema);
     }
 }
