@@ -16,10 +16,7 @@ public interface ERShape {
 
         @Override
         public String toString() {
-            return "ERPoint{" +
-                    "x=" + x +
-                    ", y=" + y +
-                    '}';
+            return "("+x+','+y+")";
         }
 
         @Override

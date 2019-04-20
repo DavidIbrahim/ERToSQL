@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.david.ertosql.ImageProcessing;
 import com.example.david.ertosql.R;
 import com.example.david.ertosql.cameraAndImages.utils.Constants;
 import com.example.david.ertosql.cameraAndImages.utils.FolderUtil;
@@ -133,6 +134,7 @@ public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewB
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         colorRgba = inputFrame.rgba();
         //todo sara
+         ImageProcessing.hilightShapes(colorRgba);
         preprocessor.changeImagePreviewOrientation(colorRgba, des, forward);
         return colorRgba;
     }

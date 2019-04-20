@@ -44,6 +44,7 @@ import static org.opencv.imgproc.Imgproc.THRESH_BINARY_INV;
 import static org.opencv.imgproc.Imgproc.THRESH_OTSU;
 import static org.opencv.imgproc.Imgproc.adaptiveThreshold;
 import static org.opencv.imgproc.Imgproc.contourArea;
+import static org.opencv.imgproc.Imgproc.putText;
 
 public class ImageProcessing {
 
@@ -52,7 +53,7 @@ public class ImageProcessing {
      * this variable holds all test pictures
      * u can add new test pictures in raw folder and add their ids in this array so you can test them
      */
-    public static int[] mTestPictures = {R.raw.pic1,R.raw.pic2,R.raw.pic3,R.raw.pic4};
+    public static int[] mTestPictures = {R.raw.pic5};
 
     /**
      * time of displaying the image of a single test
@@ -88,19 +89,37 @@ public class ImageProcessing {
                     //this is an example
                     Mat to_Rhombus=new Mat();
                     Mat copy_original=originalImage.clone();
-                    ArrayList<ERRectangle> lines = getRectangles(originalImage);
-                    ArrayList<ERElipse> elipses=getEllipse(copy_original,originalImage,to_Rhombus);
-                    ArrayList<ERRhombus> erRhombuses=getRhombus(copy_original,originalImage,to_Rhombus);
+                    Mat tocamera=originalImage.clone();
+                    Imgproc.cvtColor(tocamera,tocamera,Imgproc.COLOR_GRAY2RGB);
+                    ArrayList<ERRectangle> lines = getRectangles(originalImage,tocamera);
+                    ArrayList<ERElipse> elipses=getEllipse(copy_original,originalImage,to_Rhombus,tocamera);
+                    ArrayList<ERRhombus> erRhombuses=getRhombus(copy_original,originalImage,to_Rhombus,tocamera);
                     Log.d(IMAGE_PROCESSING_TAG, "Testing with Image : " + i + '\n' + lines.toString());
-                    imageView.setImageBitmap(convertToBitmap(originalImage));
+                    imageView.setImageBitmap(convertToBitmap(tocamera));
                 }
                 i++;
             }
+
+
 
             public void onFinish() {
             }
         }.start();
 
+
+    }
+
+    public static void  hilightShapes(Mat originalImage)
+    {
+        Mat originalImageGrayScale=originalImage.clone();
+        Imgproc.cvtColor(originalImageGrayScale,originalImageGrayScale,Imgproc.COLOR_RGB2GRAY);
+        Mat to_Rhombus=new Mat();
+        Mat copy_original=originalImageGrayScale.clone();
+        Mat tocamera=originalImage;
+      // Imgproc.cvtColor(tocamera,tocamera,Imgproc.COLOR_GRAY2RGB);
+        ArrayList<ERRectangle> lines = getRectangles(originalImageGrayScale,tocamera);
+        ArrayList<ERElipse> elipses=getEllipse(copy_original,originalImageGrayScale,to_Rhombus,tocamera);
+        ArrayList<ERRhombus> erRhombuses=getRhombus(copy_original,originalImageGrayScale,to_Rhombus,tocamera);
 
     }
 
@@ -116,7 +135,8 @@ public class ImageProcessing {
      * @param mat
      * @return array list contain ERReactangle of the image
      */
-    public static ArrayList<ERRectangle> getRectangles(Mat mat) {
+
+    public static ArrayList<ERRectangle> getRectangles(Mat mat,Mat tocamera) {
         //copy image
 
        // Mat img = mat.clone();
@@ -156,6 +176,8 @@ public class ImageProcessing {
         MatOfPoint2f approxCurve = new MatOfPoint2f();
         Mat cut = null;
         int count =0;
+
+       ArrayList<MatOfPoint> c=new ArrayList<>();
         for (MatOfPoint cnt : contour) {
 
             MatOfPoint2f curve = new MatOfPoint2f(cnt.toArray());
@@ -177,7 +199,8 @@ public class ImageProcessing {
                 String text = "sara";
                 ERRectangle e = new ERRectangle(center, text);
                 erRectangles.add(e);
-                //erRectangles.add(e);
+                c.add(cnt);
+
 
                 //
                 Imgproc.fillPoly(img, Collections.singletonList(cnt), black);
@@ -185,13 +208,18 @@ public class ImageProcessing {
                // Imgproc.putText(img,"sara",p,2,2,white,2);
             }
 
+
         }
+        for (int i=0;i<c.size();i++){
+            Imgproc.drawContours(tocamera,c,i,new Scalar(0,0,255),5);
+        }
+
         Log.d("rectangle-count", String.valueOf(count));
         Imgproc.erode(img, img, Kernel);
         return erRectangles;
     }
 
-    private static ArrayList<ERElipse> getEllipse(Mat orig,Mat mat,Mat to_rhombus)
+    public static ArrayList<ERElipse> getEllipse(Mat orig,Mat mat,Mat to_rhombus,Mat tocamera)
     {
 
         Imgproc.GaussianBlur(orig,orig,new Size(5,5),0);
@@ -210,6 +238,7 @@ public class ImageProcessing {
         MatOfPoint2f approxCurve = new MatOfPoint2f();
         Mat cut = null;
         int count=0;
+        ArrayList<MatOfPoint> c=new ArrayList<>();
         for (MatOfPoint cnt : contour) {
 
             MatOfPoint2f curve = new MatOfPoint2f(cnt.toArray());
@@ -221,16 +250,21 @@ public class ImageProcessing {
             if(numberVertices>8&&contourArea(cnt)>2000) {
                 Rect rec = Imgproc.boundingRect(cnt);
                 cut = orig.submat(rec);
+                boolean check=there_is_line(cut);
                 ERShape.ERPoint center = new ERShape.ERPoint(rec.x + (rec.width / 2), rec.y + (rec.height / 2));
                String s="attr";
-                ERElipse e=new ERElipse(center,s,false);
+                ERElipse e=new ERElipse(center,s,check);
                 erElipses.add(e);
                 Imgproc.fillPoly(mat, Collections.singletonList(cnt), new Scalar(0, 0, 0));
                 Imgproc.fillPoly(img, Collections.singletonList(cnt), new Scalar(0, 0, 0));
                 count++;
-
-              //  Log.d("eli", String.valueOf(numberVertices));
+                c.add(cnt);
+                if(check)
+                  putText(mat,"c",new Point(rec.x +(rec.width / 2), rec.y + (rec.height / 2)),2,2,new Scalar(200,200,200),4);
             }
+        }
+        for (int j=0;j<c.size();j++){
+            Imgproc.drawContours(tocamera,c,j,new Scalar(255,0,0),5);
         }
         Log.d("3dd-elipse", String.valueOf(count));
 
@@ -238,7 +272,7 @@ public class ImageProcessing {
         return erElipses;
     }
 
-    private static ArrayList<ERRhombus> getRhombus(Mat orig,Mat mat,Mat from_ellipse){
+   public static ArrayList<ERRhombus> getRhombus(Mat orig,Mat mat,Mat from_ellipse,Mat tocamera){
         ArrayList<ERRhombus> erRhombuses=new ArrayList<>();
         Mat la=new Mat();
 
@@ -248,6 +282,7 @@ public class ImageProcessing {
         MatOfPoint2f approxCurve = new MatOfPoint2f();
         Mat cut = null;
         int count=0;
+       ArrayList<MatOfPoint> c=new ArrayList<>();
         for (MatOfPoint cnt : contour) {
 
             MatOfPoint2f curve = new MatOfPoint2f(cnt.toArray());
@@ -266,10 +301,13 @@ public class ImageProcessing {
                String s="relation";
                 ERRhombus e=new ERRhombus(center,s);
                 erRhombuses.add(e);
-
+                c.add(cnt);
 
             }
         }
+       for (int j=0;j<c.size();j++){
+           Imgproc.drawContours(tocamera,c,j,new Scalar(0,255,0),5);
+       }
         Log.d("3dd_r", String.valueOf(count));
 
 
@@ -277,7 +315,11 @@ public class ImageProcessing {
         return erRhombuses;
 
     }
-
+    public static boolean there_is_line (Mat src) //function to know whether there is any line or not
+    {
+        Imgproc.HoughLinesP(src, src, 1, Math.PI / 180, 0, 70, 30); // runs the actual detection
+        return ! src.empty();
+    }
     private static ArrayList<ERLine> getLines(Mat mat) {
         //todo kero   implement the method
         ArrayList<ERLine> erLines = new ArrayList<ERLine>();
@@ -321,14 +363,14 @@ public class ImageProcessing {
         return bitmap;
     }
 
-    private static ArrayList<ERShape> extractAllShapes(Mat originalImage) {
+   /* private static ArrayList<ERShape> extractAllShapes(Mat originalImage) {
         ArrayList<ERShape> erShapes = new ArrayList<>();
         ArrayList<ERRectangle> rectangleArrayList = getRectangles(originalImage);
 
 
 
         return erShapes;
-    }
+    }*/
 
 
 
