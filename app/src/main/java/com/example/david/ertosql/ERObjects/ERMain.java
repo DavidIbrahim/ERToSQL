@@ -6,11 +6,12 @@ import java.util.ArrayList;
 
 public class ERMain {
     public static void main(String args[]) {
-        //Simple Attributes
+        //Creating Simple Attributes
         ERAttribute K2 = new ERAttribute("DepID");
         ERAttribute A3 = new ERAttribute("Name");
         ERAttribute A4 = new ERAttribute("Building No.");
 
+        //Setting attributes to unique in an entity
         ArrayList<ERAttribute> keys2 = new ArrayList<>();
         keys2.add(K2);
         ArrayList<ERAttribute> attributes2 = new ArrayList<>();
@@ -34,7 +35,7 @@ public class ERMain {
         EREntity E1 = new EREntity("Employee", keys1, attributes1);
         EREntity E2 = new EREntity("Department", keys2, attributes2);
 
-        EROneToOneRelationship R1 = new EROneToOneRelationship("Has",E1,E2,EROneToOneRelationship.Participation.TOTAL_TOTAL);
+        EROneToOneRelationship R1 = new EROneToOneRelationship("Has",E2,E1,EROneToOneRelationship.Participation.PARTIAL_PARTIAL);
 
         //System.out.println(R1);
 
@@ -42,6 +43,6 @@ public class ERMain {
         RSMapper rsMapper = new RSMapper(D1);
         ArrayList<ERRelationalSchema> relationalSchema = rsMapper.getRelationalSchemas();
 
-        System.out.println(relationalSchema);
+        System.out.println(relationalSchema.toString());
     }
 }

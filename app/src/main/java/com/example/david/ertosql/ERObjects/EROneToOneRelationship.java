@@ -30,6 +30,6 @@ public class EROneToOneRelationship extends ERBinaryRelationship {
     }
 
     public enum Participation {
-        TOTAL_TOTAL, TOTAL_PARTIAL, PARTIAL_PARTIAL
+        TOTAL_TOTAL, PARTIAL_TOTAL, PARTIAL_PARTIAL
     }
 }

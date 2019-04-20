@@ -10,10 +10,13 @@ public class ERRelationalSchema {
 
     @Override
     public String toString() {
-        return "RSTitle:" + title
-                + " CandidateKeys:" + candidateKeys.toString()
-                + " Attributes:" + attributes.toString();
-                //+ " ForeignKeys:" + foreignKeys.toString();
+        String string = "RSTitle:" + title
+                + " CandidateKeys:" + candidateKeys.toString();
+        if(attributes!=null)
+            string+= " Attributes:" + attributes.toString();
+        if(foreignKeys!=null)
+            string+= " ForeignKeys:" + foreignKeys.toString();
+        return string;
     }
 
     public ERRelationalSchema(String title, ArrayList<ERAttribute> candidateKeys) {
