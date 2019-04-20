@@ -32,9 +32,7 @@ public class ERMain {
         EREntity E1 = new EREntity("Employee", keys1, attributes1);
         EREntity E2 = new EREntity("Department", keys2, attributes2);
 
-        ERTotalPartialRelationship R1 = new ERTotalPartialRelationship("Has");
-        R1.addEntity(E1, ERTotalPartialRelationship.Participation.partialMany);
-        R1.addEntity(E2, ERTotalPartialRelationship.Participation.totalOne);
+        EROneToOneRelationship R1 = new EROneToOneRelationship("Has",E1,E2,EROneToOneRelationship.Participation.TOTAL_PARTIAL);
 
         System.out.println(R1);
     }
