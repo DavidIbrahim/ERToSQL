@@ -13,10 +13,6 @@ import java.util.ArrayList;
 public class RSMapper {
     ArrayList<ERRelationalSchema> relationalSchemas;
 
-    public ArrayList<ERRelationalSchema> getRelationalSchemas() {
-        return relationalSchemas;
-    }
-
     public RSMapper(ERDiagram diagram) {
         this.relationalSchemas = new ArrayList<>();
         for (ERRelationship erRelationship : diagram.getRelations()) {
@@ -27,8 +23,67 @@ public class RSMapper {
                 if (oneToOne.getParticipation().toString().equals("TOTAL_TOTAL")) {
                     formTotalTotalRelationalSchema(oneToOne);
                 }
+                else if (oneToOne.getParticipation().toString().equals("PARTIAL_TOTAL")) {
+                    formPartialTotalRelationalSchema(oneToOne);
+                }
+                else if (oneToOne.getParticipation().toString().equals("PARTIAL_PARTIAL")) {
+                    formPartialPartialRelationalSchema(oneToOne);
+                }
             }
         }
+    }
+
+    private void formPartialPartialRelationalSchema(EROneToOneRelationship oneToOne) {
+        EREntity entity1 = oneToOne.getEntity1();
+        EREntity entity2 = oneToOne.getEntity2();
+
+        String schemaTitle1 = entity1.getTitle();
+        ArrayList<ERAttribute> schemaCandidateKeys1=entity1.getKey();
+        ArrayList<ERAttribute> schemaAttributes1 = entity1.getEntityAttributes();
+
+        String schemaTitle2 = entity2.getTitle();
+        ArrayList<ERAttribute> schemaCandidateKeys2=entity2.getKey();
+        ArrayList<ERAttribute> schemaAttributes2 = entity2.getEntityAttributes();
+
+        String schemaTitle3 = oneToOne.getTitle();
+        ArrayList<ERAttribute> schemaCandidateKeys3=new ArrayList<>();
+        schemaCandidateKeys3.addAll(entity1.getKey());
+        schemaCandidateKeys3.addAll(entity2.getKey());
+
+        //todo: support composite/multivalued attributes?
+        ERRelationalSchema relationalSchema1 = new ERRelationalSchema(schemaTitle1,schemaCandidateKeys1,schemaAttributes1);
+        ERRelationalSchema relationalSchema2 = new ERRelationalSchema(schemaTitle2,schemaCandidateKeys2,schemaAttributes2);
+        ERRelationalSchema relationalSchema3 = new ERRelationalSchema(schemaTitle3,schemaCandidateKeys3);
+
+        relationalSchemas.add(relationalSchema1);
+        relationalSchemas.add(relationalSchema2);
+        relationalSchemas.add(relationalSchema3);
+
+    }
+
+    public ArrayList<ERRelationalSchema> getRelationalSchemas() {
+        return relationalSchemas;
+    }
+
+    private void formPartialTotalRelationalSchema(EROneToOneRelationship oneToOne) {
+        EREntity entity1 = oneToOne.getEntity1();
+        EREntity entity2 = oneToOne.getEntity2();
+
+        String schemaTitle1 = entity1.getTitle();
+        ArrayList<ERAttribute> schemaCandidateKeys1=entity1.getKey();
+        ArrayList<ERAttribute> schemaAttributes1 = entity1.getEntityAttributes();
+
+        String schemaTitle2 = entity2.getTitle();
+        ArrayList<ERAttribute> schemaCandidateKeys2=entity2.getKey();
+        ArrayList<ERAttribute> schemaAttributes2 = entity2.getEntityAttributes();
+
+        //todo: support composite/multivalued attributes?
+        ERRelationalSchema relationalSchema1 = new ERRelationalSchema(schemaTitle1,schemaCandidateKeys1,schemaAttributes1);
+        ERRelationalSchema relationalSchema2 = new ERRelationalSchema(schemaTitle2,schemaCandidateKeys2,schemaAttributes2);
+        relationalSchema2.setForeignKeys(schemaCandidateKeys1);
+
+        relationalSchemas.add(relationalSchema1);
+        relationalSchemas.add(relationalSchema2);
     }
 
     private void formTotalTotalRelationalSchema(EROneToOneRelationship oneToOne) {
@@ -47,7 +102,7 @@ public class RSMapper {
             schemaCandidateKeys=entity2.getKey();
             schemaTitle = oneToOne.getEntity2().getTitle() + "-" + oneToOne.getEntity1().getTitle();
         }
-        //todo: support composite attributes?
+        //todo: support composite/multivalued attributes?
         ArrayList<ERAttribute> schemaAttributes = new ArrayList<>();
         schemaAttributes.addAll(entity1.getEntityAttributes());
         schemaAttributes.addAll(entity2.getEntityAttributes());
