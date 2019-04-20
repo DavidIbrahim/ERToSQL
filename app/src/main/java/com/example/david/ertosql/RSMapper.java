@@ -7,7 +7,6 @@ import com.example.david.ertosql.ERObjects.EROneToOneRelationship;
 import com.example.david.ertosql.ERObjects.ERRelationalSchema;
 import com.example.david.ertosql.ERObjects.ERRelationship;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class RSMapper {
@@ -54,6 +53,7 @@ public class RSMapper {
         ERRelationalSchema relationalSchema1 = new ERRelationalSchema(schemaTitle1,schemaCandidateKeys1,schemaAttributes1);
         ERRelationalSchema relationalSchema2 = new ERRelationalSchema(schemaTitle2,schemaCandidateKeys2,schemaAttributes2);
         ERRelationalSchema relationalSchema3 = new ERRelationalSchema(schemaTitle3,schemaCandidateKeys3);
+        relationalSchema3.setForeignKeys(schemaCandidateKeys3);
 
         relationalSchemas.add(relationalSchema1);
         relationalSchemas.add(relationalSchema2);
