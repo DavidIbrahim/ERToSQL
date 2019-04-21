@@ -35,7 +35,7 @@ public class ERMain {
         EREntity E1 = new EREntity("Employee", keys1, attributes1);
         EREntity E2 = new EREntity("Department", keys2, attributes2);
 
-        EROneToOneRelationship R1 = new EROneToOneRelationship("Has",E2,E1,EROneToOneRelationship.Participation.PARTIAL_PARTIAL);
+        EROneToOneRelationship R1 = new EROneToOneRelationship("Has",E2,E1,EROneToOneRelationship.Participation.PARTIAL_TOTAL);
 
         //System.out.println(R1);
 

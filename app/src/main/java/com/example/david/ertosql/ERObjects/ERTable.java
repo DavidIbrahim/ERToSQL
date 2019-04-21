@@ -14,6 +14,7 @@ public class ERTable {
         this.columns = columns;
         this.primaryKeys = primaryKeys;
         this.unique = unique;
+        this.foreignKeys = new ArrayList<>();
 
     }
 
@@ -21,6 +22,8 @@ public class ERTable {
         this.title = title;
         this.columns = columns;
         this.primaryKeys = primaryKeys;
+        this.unique = new ArrayList<>();
+        this.foreignKeys = new ArrayList<>();
     }
 
     public ERTable(String title, ArrayList<ERAttribute> columns, ArrayList<ERAttribute> primaryKeys, ArrayList<ERAttribute> unique, ArrayList<ERForeignKey> foreignKeys) {
@@ -35,11 +38,11 @@ public class ERTable {
     public String toString() {
         String string = "TableTitle:" + title
                 + " Columns:" + columns.toString();
-        string+= " PrimaryKeys:" + primaryKeys.toString();
-        if(unique!=null)
-            string+= " Unique:" + unique.toString();
-        if(foreignKeys!=null)
-            string+= " ForeignKeys:" + foreignKeys.toString();
+        string += " PrimaryKeys:" + primaryKeys.toString();
+        if (!unique.isEmpty())
+            string += " Unique:" + unique.toString();
+        if (!foreignKeys.isEmpty())
+            string += " ForeignKeys:" + foreignKeys.toString();
         return string;
     }
 

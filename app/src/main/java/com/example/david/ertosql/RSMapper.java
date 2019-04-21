@@ -62,7 +62,7 @@ public class RSMapper {
         ArrayList<ERAttribute> secondTablePrimaryKeys = new ArrayList<>();
         secondTablePrimaryKeys.add(entity2.getKey());
 
-        ArrayList<ERAttribute> secondTableUnique = new ArrayList<>(entity1.getUniqueAttributes());
+        ArrayList<ERAttribute> secondTableUnique = new ArrayList<>(entity2.getUniqueAttributes());
         secondTableUnique.remove(entity2.getKey());
 
         ArrayList<ERAttribute> secondTableColumns = new ArrayList<>();
