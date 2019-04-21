@@ -48,21 +48,28 @@ public class RSMapper {
         ArrayList<ERAttribute> firstTablePrimaryKeys = new ArrayList<>();
         firstTablePrimaryKeys.add(entity1.getKey());
 
+        ArrayList<ERAttribute> firstTableUnique = new ArrayList<>(entity1.getUniqueAttributes());
+        firstTableUnique.remove(entity1.getKey());
+
         ArrayList<ERAttribute> firstTableColumns = new ArrayList<>();
         firstTableColumns.addAll(entity1.getUniqueAttributes());
         firstTableColumns.addAll(entity1.getEntityAttributes());
 
-        ERTable table1 = new ERTable(firstTableTitle, firstTableColumns, firstTablePrimaryKeys);
+        ERTable table1 = new ERTable(firstTableTitle, firstTableColumns, firstTablePrimaryKeys, firstTableUnique);
 
         String secondTableTitle = entity2.getTitle();
+
         ArrayList<ERAttribute> secondTablePrimaryKeys = new ArrayList<>();
         secondTablePrimaryKeys.add(entity2.getKey());
+
+        ArrayList<ERAttribute> secondTableUnique = new ArrayList<>(entity1.getUniqueAttributes());
+        secondTableUnique.remove(entity2.getKey());
 
         ArrayList<ERAttribute> secondTableColumns = new ArrayList<>();
         secondTableColumns.addAll(entity2.getUniqueAttributes());
         secondTableColumns.addAll(entity2.getEntityAttributes());
 
-        ERTable table2 = new ERTable(secondTableTitle, secondTableColumns, secondTablePrimaryKeys);
+        ERTable table2 = new ERTable(secondTableTitle, secondTableColumns, secondTablePrimaryKeys, secondTableUnique);
 
         String thirdTableTitle = oneToOne.getTitle();
 
@@ -76,7 +83,8 @@ public class RSMapper {
 
         //The schema columns are only its primary keys
 
-        ERTable table3 = new ERTable(thirdTableTitle, thirdTablePrimaryKeys, thirdTablePrimaryKeys,thirdTableForeignKeys);
+        ERTable table3 = new ERTable(thirdTableTitle, thirdTablePrimaryKeys, thirdTablePrimaryKeys);
+        table3.setForeignKeys(thirdTableForeignKeys);
 
         tables.add(table1);
         tables.add(table2);
@@ -98,11 +106,14 @@ public class RSMapper {
         ArrayList<ERAttribute> firstTablePrimaryKeys = new ArrayList<>();
         firstTablePrimaryKeys.add(entity1.getKey());
 
+        ArrayList<ERAttribute> firstTableUnique = new ArrayList<>(entity1.getUniqueAttributes());
+        firstTableUnique.remove(entity1.getKey());
+
         ArrayList<ERAttribute> firstTableColumns = new ArrayList<>();
         firstTableColumns.addAll(entity1.getUniqueAttributes());
         firstTableColumns.addAll(entity1.getEntityAttributes());
 
-        ERTable table1 = new ERTable(firstTableTitle, firstTableColumns, firstTablePrimaryKeys);
+        ERTable table1 = new ERTable(firstTableTitle, firstTableColumns, firstTablePrimaryKeys, firstTableUnique);
 
         String secondTableTitle = entity2.getTitle();
 
@@ -112,12 +123,15 @@ public class RSMapper {
         ArrayList<ERForeignKey> secondTableForeignKeys = new ArrayList<>();
         secondTableForeignKeys.add(new ERForeignKey(entity1.getKey(),entity1));
 
+        ArrayList<ERAttribute> secondTableUnique = new ArrayList<>(entity2.getUniqueAttributes());
+        secondTableUnique.remove(entity2.getKey());
+
         ArrayList<ERAttribute> secondTableColumns = new ArrayList<>();
         secondTableColumns.addAll(entity2.getUniqueAttributes());
         secondTableColumns.addAll(entity2.getEntityAttributes());
         secondTableColumns.add(entity1.getKey());
 
-        ERTable table2 = new ERTable(secondTableTitle, secondTableColumns, secondTablePrimaryKeys, secondTableForeignKeys);
+        ERTable table2 = new ERTable(secondTableTitle, secondTableColumns, secondTablePrimaryKeys, secondTableUnique, secondTableForeignKeys);
 
         tables.add(table1);
         tables.add(table2);
@@ -133,13 +147,18 @@ public class RSMapper {
         ArrayList<ERAttribute> tablePrimaryKeys = new ArrayList<>();
         tablePrimaryKeys.add(entity1.getKey());
 
+        ArrayList<ERAttribute> tableUnique= new ArrayList<>();
+        tableUnique.addAll(entity1.getUniqueAttributes());
+        tableUnique.addAll(entity2.getUniqueAttributes());
+        tableUnique.remove(entity1.getKey());
+
         ArrayList<ERAttribute> tableColumns = new ArrayList<>();
         tableColumns.addAll(entity1.getUniqueAttributes());
         tableColumns.addAll(entity1.getEntityAttributes());
         tableColumns.addAll(entity2.getUniqueAttributes());
         tableColumns.addAll(entity2.getEntityAttributes());
 
-        ERTable table = new ERTable(tableTitle, tableColumns, tablePrimaryKeys);
+        ERTable table = new ERTable(tableTitle, tableColumns, tablePrimaryKeys, tableUnique);
 
         tables.add(table);
     }

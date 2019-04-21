@@ -6,22 +6,41 @@ public class ERTable {
     String title;
     ArrayList<ERAttribute> columns;
     ArrayList<ERAttribute> primaryKeys;
+    ArrayList<ERAttribute> unique;
     ArrayList<ERForeignKey> foreignKeys;
 
-    @Override
-    public String toString() {
-        String string = "TableTitle:" + title
-                + " Columns:" + columns.toString();
-        string+= " PrimaryKeys:" + primaryKeys.toString();
-        if(foreignKeys!=null)
-            string+= " ForeignKeys:" + foreignKeys.toString();
-        return string;
+    public ERTable(String title, ArrayList<ERAttribute> columns, ArrayList<ERAttribute> primaryKeys, ArrayList<ERAttribute> unique) {
+        this.title = title;
+        this.columns = columns;
+        this.primaryKeys = primaryKeys;
+        this.unique = unique;
+
     }
 
     public ERTable(String title, ArrayList<ERAttribute> columns, ArrayList<ERAttribute> primaryKeys) {
         this.title = title;
         this.columns = columns;
         this.primaryKeys = primaryKeys;
+    }
+
+    public ERTable(String title, ArrayList<ERAttribute> columns, ArrayList<ERAttribute> primaryKeys, ArrayList<ERAttribute> unique, ArrayList<ERForeignKey> foreignKeys) {
+        this.title = title;
+        this.columns = columns;
+        this.primaryKeys = primaryKeys;
+        this.unique = unique;
+        this.foreignKeys = foreignKeys;
+    }
+
+    @Override
+    public String toString() {
+        String string = "TableTitle:" + title
+                + " Columns:" + columns.toString();
+        string+= " PrimaryKeys:" + primaryKeys.toString();
+        if(unique!=null)
+            string+= " Unique:" + unique.toString();
+        if(foreignKeys!=null)
+            string+= " ForeignKeys:" + foreignKeys.toString();
+        return string;
     }
 
     public String getTitle() {
@@ -46,13 +65,6 @@ public class ERTable {
 
     public void setColumns(ArrayList<ERAttribute> columns) {
         this.columns = columns;
-    }
-
-    public ERTable(String title, ArrayList<ERAttribute> columns, ArrayList<ERAttribute> primaryKeys, ArrayList<ERForeignKey> foreignKeys) {
-        this.title = title;
-        this.columns = columns;
-        this.primaryKeys = primaryKeys;
-        this.foreignKeys = foreignKeys;
     }
 
     public ArrayList<ERForeignKey> getForeignKeys() {
