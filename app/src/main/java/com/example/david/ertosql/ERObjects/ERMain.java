@@ -1,6 +1,7 @@
 package com.example.david.ertosql.ERObjects;
 
 import com.example.david.ertosql.RSMapper;
+import com.example.david.ertosql.SQLMapper;
 
 import java.util.ArrayList;
 
@@ -39,10 +40,19 @@ public class ERMain {
 
         //System.out.println(R1);
 
+        //ER Diagram
         ERDiagram D1 = new ERDiagram("Diagram 1", R1);
-        RSMapper rsMapper = new RSMapper(D1);
-        ArrayList<ERTable> tables  = rsMapper.getTables();
 
-        System.out.println(tables.toString());
+        //Relational Schema
+        RSMapper rsMapper = new RSMapper(D1);
+        ERRelationalSchema relationalSchema = new ERRelationalSchema(rsMapper.getTables());
+
+        System.out.println(relationalSchema);
+
+        //SQL code
+        SQLMapper sqlMapper = new SQLMapper(relationalSchema);
+        String SQLCode = sqlMapper.getSQLCode();
+
+        //System.out.println(SQLCode);
     }
 }
