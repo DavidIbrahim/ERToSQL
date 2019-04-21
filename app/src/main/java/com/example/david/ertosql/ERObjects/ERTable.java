@@ -2,7 +2,7 @@ package com.example.david.ertosql.ERObjects;
 
 import java.util.ArrayList;
 
-public class ERRelationalSchema {
+public class ERTable {
     String title;
     ArrayList<ERAttribute> columns;
     ArrayList<ERAttribute> primaryKeys;
@@ -10,7 +10,7 @@ public class ERRelationalSchema {
 
     @Override
     public String toString() {
-        String string = "RSTitle:" + title
+        String string = "TableTitle:" + title
                 + " Columns:" + columns.toString();
         string+= " PrimaryKeys:" + primaryKeys.toString();
         if(foreignKeys!=null)
@@ -18,7 +18,7 @@ public class ERRelationalSchema {
         return string;
     }
 
-    public ERRelationalSchema(String title, ArrayList<ERAttribute> columns, ArrayList<ERAttribute> primaryKeys) {
+    public ERTable(String title, ArrayList<ERAttribute> columns, ArrayList<ERAttribute> primaryKeys) {
         this.title = title;
         this.columns = columns;
         this.primaryKeys = primaryKeys;
@@ -48,10 +48,10 @@ public class ERRelationalSchema {
         this.columns = columns;
     }
 
-    public ERRelationalSchema(String title, ArrayList<ERAttribute> primaryKeys, ArrayList<ERAttribute> columns, ArrayList<ERForeignKey> foreignKeys) {
+    public ERTable(String title, ArrayList<ERAttribute> columns, ArrayList<ERAttribute> primaryKeys, ArrayList<ERForeignKey> foreignKeys) {
         this.title = title;
-        this.primaryKeys = primaryKeys;
         this.columns = columns;
+        this.primaryKeys = primaryKeys;
         this.foreignKeys = foreignKeys;
     }
 
