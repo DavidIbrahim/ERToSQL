@@ -8,4 +8,9 @@ public class ERForeignKey {
         this.column = column;
         this.reference = reference;
     }
+
+    @Override
+    public String toString() {
+        return "[attribute:" + column.getTitle() + ", reference:" + reference.getTitle() + "]";
+    }
 }

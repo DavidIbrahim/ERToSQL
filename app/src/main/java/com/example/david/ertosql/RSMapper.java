@@ -115,7 +115,7 @@ public class RSMapper {
         ArrayList<ERAttribute> secondTableColumns = new ArrayList<>();
         secondTableColumns.addAll(entity2.getUniqueAttributes());
         secondTableColumns.addAll(entity2.getEntityAttributes());
-        secondTableColumns.addAll(firstTablePrimaryKeys);
+        secondTableColumns.add(entity1.getKey());
 
         ERTable table2 = new ERTable(secondTableTitle, secondTableColumns, secondTablePrimaryKeys, secondTableForeignKeys);
 
