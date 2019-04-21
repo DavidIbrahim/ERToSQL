@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class ERDiagram {
     String title;
+    ArrayList<EREntity> entities;
     ArrayList<ERRelationship> relations;
 
     public ERDiagram(String title) {

@@ -1,8 +1,16 @@
 package com.example.david.ertosql.ERObjects;
 
 public class ERBinaryRelationship extends ERRelationship {
-    EREntity entity1;
-    EREntity entity2;
+     EREntity entity1;
+     EREntity entity2;
+
+    public ERBinaryRelationship() {
+    }
+
+    public ERBinaryRelationship(EREntity entity1, EREntity entity2) {
+        this.entity1 = entity1;
+        this.entity2 = entity2;
+    }
 
     public EREntity getEntity1() {
         return entity1;

@@ -4,30 +4,24 @@ import java.util.ArrayList;
 
 public class ERRelationalSchema {
     String title;
-    ArrayList<ERAttribute> candidateKeys;
-    ArrayList<ERAttribute> attributes;
-    ArrayList<ERAttribute> foreignKeys;
+    ArrayList<ERAttribute> columns;
+    ArrayList<ERAttribute> primaryKeys;
+    ArrayList<ERForeignKey> foreignKeys;
 
     @Override
     public String toString() {
         String string = "RSTitle:" + title
-                + " CandidateKeys:" + candidateKeys.toString();
-        if(attributes!=null)
-            string+= " Attributes:" + attributes.toString();
+                + " Columns:" + columns.toString();
+        string+= " PrimaryKeys:" + primaryKeys.toString();
         if(foreignKeys!=null)
             string+= " ForeignKeys:" + foreignKeys.toString();
         return string;
     }
 
-    public ERRelationalSchema(String title, ArrayList<ERAttribute> candidateKeys) {
+    public ERRelationalSchema(String title, ArrayList<ERAttribute> columns, ArrayList<ERAttribute> primaryKeys) {
         this.title = title;
-        this.candidateKeys = candidateKeys;
-    }
-
-    public ERRelationalSchema(String title, ArrayList<ERAttribute> candidateKeys, ArrayList<ERAttribute> attributes) {
-        this.title = title;
-        this.candidateKeys = candidateKeys;
-        this.attributes = attributes;
+        this.columns = columns;
+        this.primaryKeys = primaryKeys;
     }
 
     public String getTitle() {
@@ -38,27 +32,34 @@ public class ERRelationalSchema {
         this.title = title;
     }
 
-    public ArrayList<ERAttribute> getCandidateKeys() {
-        return candidateKeys;
+    public ArrayList<ERAttribute> getPrimaryKeys() {
+        return primaryKeys;
     }
 
-    public void setCandidateKeys(ArrayList<ERAttribute> candidateKeys) {
-        this.candidateKeys = candidateKeys;
+    public void setPrimaryKeys(ArrayList<ERAttribute> primaryKeys) {
+        this.primaryKeys = primaryKeys;
     }
 
-    public ArrayList<ERAttribute> getAttributes() {
-        return attributes;
+    public ArrayList<ERAttribute> getColumns() {
+        return columns;
     }
 
-    public void setAttributes(ArrayList<ERAttribute> attributes) {
-        this.attributes = attributes;
+    public void setColumns(ArrayList<ERAttribute> columns) {
+        this.columns = columns;
     }
 
-    public ArrayList<ERAttribute> getForeignKeys() {
+    public ERRelationalSchema(String title, ArrayList<ERAttribute> primaryKeys, ArrayList<ERAttribute> columns, ArrayList<ERForeignKey> foreignKeys) {
+        this.title = title;
+        this.primaryKeys = primaryKeys;
+        this.columns = columns;
+        this.foreignKeys = foreignKeys;
+    }
+
+    public ArrayList<ERForeignKey> getForeignKeys() {
         return foreignKeys;
     }
 
-    public void setForeignKeys(ArrayList<ERAttribute> foreignKeys) {
+    public void setForeignKeys(ArrayList<ERForeignKey> foreignKeys) {
         this.foreignKeys = foreignKeys;
     }
 }

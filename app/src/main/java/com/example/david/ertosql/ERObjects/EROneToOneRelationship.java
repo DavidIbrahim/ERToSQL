@@ -1,7 +1,5 @@
 package com.example.david.ertosql.ERObjects;
 
-import java.util.HashMap;
-
 public class EROneToOneRelationship extends ERBinaryRelationship {
     Participation participation;
 
@@ -9,17 +7,18 @@ public class EROneToOneRelationship extends ERBinaryRelationship {
         return participation;
     }
 
-    public EROneToOneRelationship(String title, EREntity entity1, EREntity entity2,
-                                  EROneToOneRelationship.Participation participation) {
+    public EROneToOneRelationship(String title, EREntity entity1, EREntity entity2){
+        super(entity1,entity2);
         this.title = title;
-        this.entity1 = entity1;
-        this.entity2 = entity2;
-        this.participation = participation;
+        this.participation = Participation.PARTIAL_PARTIAL;
     }
 
-//    public void addEntity(EREntity entity, EROneToOneRelationship.Participation participation) {
-//        entities.put(entity, participation);
-//    }
+    public EROneToOneRelationship(String title, EREntity entity1, EREntity entity2,
+                                  EROneToOneRelationship.Participation participation) {
+        super(entity1,entity2);
+        this.title = title;
+        this.participation = participation;
+    }
 
     @Override
     public String toString() {

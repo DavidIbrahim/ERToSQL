@@ -6,6 +6,13 @@ public class ERRelationship {
     String title;
     ArrayList<ERAttribute> attributes;
 
+    public ERRelationship() {
+    }
+
+    public ERRelationship(String title) {
+        this.title = title;
+    }
+
     public ArrayList<ERAttribute> getAttributes() {
         return attributes;
     }

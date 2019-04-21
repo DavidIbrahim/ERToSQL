@@ -11,7 +11,7 @@ public class ERMain {
         ERAttribute A3 = new ERAttribute("Name");
         ERAttribute A4 = new ERAttribute("Building No.");
 
-        //Setting attributes to unique in an entity
+        //Setting columns to unique in an entity
         ArrayList<ERAttribute> keys2 = new ArrayList<>();
         keys2.add(K2);
         ArrayList<ERAttribute> attributes2 = new ArrayList<>();
