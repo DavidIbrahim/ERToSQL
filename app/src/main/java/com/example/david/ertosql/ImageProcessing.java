@@ -46,6 +46,15 @@ import static org.opencv.imgproc.Imgproc.adaptiveThreshold;
 import static org.opencv.imgproc.Imgproc.contourArea;
 import static org.opencv.imgproc.Imgproc.putText;
 
+
+import static com.example.david.ertosql.er.shapes.ERLine.ExtendLine;
+import static com.example.david.ertosql.er.shapes.ERLine.InsideLine;
+import static com.example.david.ertosql.er.shapes.ERShape.ERPoint.least_x;
+import static com.example.david.ertosql.er.shapes.ERShape.ERPoint.most_x;
+import static com.example.david.ertosql.er.shapes.ERShape.ERPoint.least_y;
+import static com.example.david.ertosql.er.shapes.ERShape.ERPoint.most_y;
+
+
 public class ImageProcessing {
 
     private final static String IMAGE_PROCESSING_TAG = ImageProcessing.class.getSimpleName();
@@ -82,7 +91,7 @@ public class ImageProcessing {
                 if (TEST_A_METHOD_RETURNS_IMAGE) {
                     //todo change exampleOnUsingOpenCV wz ur own method if it returns a pic to test it
 
-                    Mat convertedImageMat = exampleOnUsingOpenCV(originalImage);
+                    Mat convertedImageMat = get_lines_test(originalImage);
                     imageView.setImageBitmap(convertToBitmap(convertedImageMat));
                 } else {
                     //todo test ur own code here if it doesn't return an image
@@ -320,13 +329,83 @@ public class ImageProcessing {
         Imgproc.HoughLinesP(src, src, 1, Math.PI / 180, 0, 70, 30); // runs the actual detection
         return ! src.empty();
     }
-    private static ArrayList<ERLine> getLines(Mat mat) {
+    private static ArrayList<ERLine> getLines(Mat src) {
         //todo kero   implement the method
-        ArrayList<ERLine> erLines = new ArrayList<ERLine>();
-        erLines.add(new ERLine(new ERShape.ERPoint(2, 2), new ERShape.ERPoint(3, 4)));
 
+        //erLines.add(new ERLine(new ERShape.ERPoint(2, 2), new ERShape.ERPoint(3, 4)));
+        Mat dst = new Mat();
+        Mat cdstP = new Mat();
+        Imgproc.Canny(src, dst, 50, 200, 3, false);
+        Imgproc.cvtColor(dst, cdstP, Imgproc.COLOR_GRAY2BGR);
+        Mat linesP = new Mat(); // will hold the results of the detection
+        Imgproc.HoughLinesP(dst, linesP, 1, Math.PI / 180, 20, 10, 5); // runs the actual detection
+        ArrayList<ERLine> erLine = new ArrayList<ERLine>();
+        for (int x = 0; x < linesP.rows(); x++) {
+            double[] l = linesP.get(x, 0);
+            ERLine l1 = new ERLine(new ERShape.ERPoint(l[0], l[1]), new ERShape.ERPoint(l[2], l[3]));
+            erLine.add(l1);
+        }
+        boolean flag=false;
+        for (int j = 0; j < erLine.size(); j++)
+        {
+            flag=false;
+            int ff=erLine.size();
+            for (int i = j+1; i < erLine.size(); i++)
+            {
 
-        return erLines;
+                if ((ExtendLine(erLine.get(i), erLine.get(j))) || (InsideLine(erLine.get(i), erLine.get(j))))
+
+                {
+                    ERShape.ERPoint p1 = new ERShape.ERPoint(0, 0);
+                    ERShape.ERPoint p2 = new ERShape.ERPoint(0, 0);
+                    if(erLine.get(i).get_slope()==500)
+                    {
+                        p2 = most_y(erLine.get(i).get_start(), erLine.get(i).get_end(), erLine.get(j).get_start(), erLine.get(j).get_end());
+                        p1 = least_y(erLine.get(i).get_start(), erLine.get(i).get_end(), erLine.get(j).get_start(), erLine.get(j).get_end());
+                    }
+                    else {
+                        p2 = most_x(erLine.get(i).get_start(), erLine.get(i).get_end(), erLine.get(j).get_start(), erLine.get(j).get_end());
+                        p1 = least_x(erLine.get(i).get_start(), erLine.get(i).get_end(), erLine.get(j).get_start(), erLine.get(j).get_end());
+                    }
+                    ERLine ged = new ERLine(p1, p2);
+                    if (ged.get_slope()==500&&erLine.get(0).get_slope()!=500)
+                    {
+                        ged.set_slope_c(erLine.get(0).get_slope(),erLine.get(0).get_c());
+                    }
+                    if (erLine.get(i).get_slope()==500){
+                        ged.set_slope_c(500,erLine.get(i).get_c());
+                    }
+                    erLine.remove(i);
+                    erLine.remove(j);
+                    erLine.add(0, ged);
+                    flag = true;
+                }
+                if (flag)
+                    break;
+            }
+            if (flag)
+                j=-1;
+
+        }
+
+        return erLine;
+    }
+    //method to show the detected lines
+    public static Mat get_lines_test (Mat src)
+    {
+        Mat dst = new Mat();
+        Mat cdstP = new Mat();
+        Imgproc.Canny(src, dst, 50, 200, 3, false);
+        Imgproc.cvtColor(dst, cdstP, Imgproc.COLOR_GRAY2BGR);
+        Mat linesP = new Mat(); // will hold the results of the detection
+        Imgproc.HoughLinesP(dst, linesP, 1, Math.PI / 180, 20, 10, 5); // runs the actual detection
+// ArrayList<Linek> Lineks = new ArrayList<Linek>(1);
+        for (int x = 0; x < linesP.rows(); x++) {
+            double[] l = linesP.get(x, 0);
+            Imgproc.line(cdstP, new Point(l[0], l[1]), new Point(l[2], l[3]), new Scalar(0, 0, 255), 3, Imgproc.LINE_AA, 0);
+        }
+
+        return cdstP ;
     }
 
     private String getStringFromImage(Mat mat, Context c) {

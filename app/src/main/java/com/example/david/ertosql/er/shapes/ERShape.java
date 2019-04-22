@@ -6,10 +6,10 @@ public interface ERShape {
 
 
     public class ERPoint {
-        public int x;
-        public int y;
+        public double x;
+        public double y;
 
-        public ERPoint(int x, int y) {
+        public ERPoint(double x, double y) {
             this.x = x;
             this.y = y;
         }
@@ -26,6 +26,72 @@ public interface ERShape {
             if(!(obj instanceof ERPoint)) return false; // if "that" is not a People or a childclass
 
             return this.x == ((ERPoint) obj).x && this.y == ((ERPoint) obj).y;
+        }
+        // todo kero
+        public void set_x (double xx)
+        {
+            x=xx;
+        }
+        public void set_y (double yy)
+        {
+            y=yy;
+        }
+        public double get_x ()
+        {
+            return x;
+        }
+        public double get_y ()
+        {
+            return y;
+        }
+        public static boolean isclose (ERPoint a, ERPoint b)
+        {
+            if(((a.get_x() - 10) <= b.get_x()&&b.get_x() <=(a.get_x()+10))&&((a.get_y() - 10) <= b.get_y()&&b.get_y() <=(a.get_y()+10)))
+            {
+                return true;
+            }
+            else return false;
+        }
+
+        public static ERPoint most_x(ERPoint p1,ERPoint p2,ERPoint p3,ERPoint p4)
+        {
+            if (p1.x>=p2.x&&p1.x>=p3.x&&p1.x>=p4.x)
+                return p1;
+            else if (p2.x>=p1.x&&p2.x>=p3.x&&p2.x>p4.x)
+                return p2;
+            else if (p3.x>=p1.x&&p3.x>=p2.x&&p3.x>=p4.x)
+                return p3;
+            else return p4;
+        }
+        public static ERPoint least_x(ERPoint p1,ERPoint p2,ERPoint p3,ERPoint p4)
+        {
+            if (p1.x<=p2.x&&p1.x<=p3.x&&p1.x<=p4.x)
+                return p1;
+            else if (p2.x<=p1.x&&p2.x<=p3.x&&p2.x<=p4.x)
+                return p2;
+            else if (p3.x<=p1.x&&p3.x<=p2.x&&p3.x<=p4.x)
+                return p3;
+            else return p4;
+        }
+        public static ERPoint least_y(ERPoint p1,ERPoint p2,ERPoint p3,ERPoint p4)
+        {
+            if (p1.y<=p2.y&&p1.y<=p3.y&&p1.y<=p4.y)
+                return p1;
+            else if (p2.y<=p1.y&&p2.y<=p3.y&&p2.y<=p4.y)
+                return p2;
+            else if (p3.y<=p1.y&&p3.y<=p2.y&&p3.x<=p4.y)
+                return p3;
+            else return p4;
+        }
+        public static ERPoint most_y(ERPoint p1,ERPoint p2,ERPoint p3,ERPoint p4)
+        {
+            if (p1.y>=p2.y&&p1.y>=p3.y&&p1.x>=p4.y)
+                return p1;
+            else if (p2.y>=p1.y&&p2.y>=p3.y&&p2.y>p4.y)
+                return p2;
+            else if (p3.y>=p1.y&&p3.y>=p2.y&&p3.y>=p4.y)
+                return p3;
+            else return p4;
         }
     }
     public class ERShapeWZCenter implements ERShape{
