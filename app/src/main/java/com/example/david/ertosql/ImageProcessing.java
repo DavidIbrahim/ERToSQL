@@ -53,7 +53,8 @@ import static com.example.david.ertosql.er.shapes.ERShape.ERPoint.least_x;
 import static com.example.david.ertosql.er.shapes.ERShape.ERPoint.most_x;
 import static com.example.david.ertosql.er.shapes.ERShape.ERPoint.least_y;
 import static com.example.david.ertosql.er.shapes.ERShape.ERPoint.most_y;
-
+import static com.example.david.ertosql.er.shapes.ERShape.ERPoint.set_tolerance;
+import static com.example.david.ertosql.er.shapes.ERLine.set_slope_c_tolerance;
 
 public class ImageProcessing {
 
@@ -333,6 +334,10 @@ public class ImageProcessing {
         //todo kero   implement the method
 
         //erLines.add(new ERLine(new ERShape.ERPoint(2, 2), new ERShape.ERPoint(3, 4)));
+        double wid=src.size().height;
+        double hei=src.size().width;
+        set_tolerance(wid,hei);
+        set_slope_c_tolerance(wid,hei);
         Mat dst = new Mat();
         Mat cdstP = new Mat();
         Imgproc.Canny(src, dst, 50, 200, 3, false);
@@ -356,7 +361,7 @@ public class ImageProcessing {
                 if ((ExtendLine(erLine.get(i), erLine.get(j))) || (InsideLine(erLine.get(i), erLine.get(j))))
 
                 {
-                    ERShape.ERPoint p1 = new ERShape.ERPoint(0, 0);
+                   ERShape.ERPoint p1 = new ERShape.ERPoint(0, 0);
                     ERShape.ERPoint p2 = new ERShape.ERPoint(0, 0);
                     if(erLine.get(i).get_slope()==500)
                     {
@@ -368,12 +373,15 @@ public class ImageProcessing {
                         p1 = least_x(erLine.get(i).get_start(), erLine.get(i).get_end(), erLine.get(j).get_start(), erLine.get(j).get_end());
                     }
                     ERLine ged = new ERLine(p1, p2);
-                    if (ged.get_slope()==500&&erLine.get(0).get_slope()!=500)
+                    if (ged.get_slope()==500&&erLine.get(i).get_slope()!=500&&erLine.get(j).get_slope()!=500)
                     {
-                        ged.set_slope_c(erLine.get(0).get_slope(),erLine.get(0).get_c());
+                        ged.set_slope_c(erLine.get(i).get_slope(),erLine.get(i).get_c());
                     }
                     if (erLine.get(i).get_slope()==500){
                         ged.set_slope_c(500,erLine.get(i).get_c());
+                    }
+                    if (erLine.get(j).get_slope()==500){
+                        ged.set_slope_c(500,erLine.get(j).get_c());
                     }
                     erLine.remove(i);
                     erLine.remove(j);

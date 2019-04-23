@@ -8,6 +8,8 @@ public interface ERShape {
     public class ERPoint {
         public double x;
         public double y;
+        private static int x_tolerance;
+        private static int y_tolerance;
 
         public ERPoint(double x, double y) {
             this.x = x;
@@ -44,9 +46,15 @@ public interface ERShape {
         {
             return y;
         }
+        public static void set_tolerance(double width, double height)
+        {
+            x_tolerance=(int)width/50;
+            y_tolerance=(int)height/50;
+        }
+
         public static boolean isclose (ERPoint a, ERPoint b)
         {
-            if(((a.get_x() - 10) <= b.get_x()&&b.get_x() <=(a.get_x()+10))&&((a.get_y() - 10) <= b.get_y()&&b.get_y() <=(a.get_y()+10)))
+            if(((a.get_x() - a.x_tolerance) <= b.get_x()&&b.get_x() <=(a.get_x()+a.x_tolerance))&&((a.get_y() - a.y_tolerance) <= b.get_y()&&b.get_y() <=(a.get_y()+a.y_tolerance)))
             {
                 return true;
             }
