@@ -46,7 +46,7 @@ public class RSMapper {
         String firstTableTitle = entity1.getTitle();
 
         ArrayList<ERAttribute> firstTablePrimaryKeys = new ArrayList<>();
-        firstTablePrimaryKeys.add(entity1.getKey());
+        firstTablePrimaryKeys.addAll(entity1.getKey());
 
         ArrayList<ERAttribute> firstTableUnique = new ArrayList<>(entity1.getUniqueAttributes());
         firstTableUnique.remove(entity1.getKey());
@@ -60,7 +60,7 @@ public class RSMapper {
         String secondTableTitle = entity2.getTitle();
 
         ArrayList<ERAttribute> secondTablePrimaryKeys = new ArrayList<>();
-        secondTablePrimaryKeys.add(entity2.getKey());
+        secondTablePrimaryKeys = entity2.getKey();
 
         ArrayList<ERAttribute> secondTableUnique = new ArrayList<>(entity2.getUniqueAttributes());
         secondTableUnique.remove(entity2.getKey());
@@ -74,8 +74,8 @@ public class RSMapper {
         String thirdTableTitle = oneToOne.getTitle();
 
         ArrayList<ERAttribute> thirdTablePrimaryKeys = new ArrayList<>();
-        thirdTablePrimaryKeys.add(entity1.getKey());
-        thirdTablePrimaryKeys.add(entity2.getKey());
+        thirdTablePrimaryKeys.addAll(entity1.getKey());
+        thirdTablePrimaryKeys.addAll(entity2.getKey());
 
         ArrayList<ERForeignKey> thirdTableForeignKeys = new ArrayList<>();
         thirdTableForeignKeys.add(new ERForeignKey(entity1.getKey(),entity1));
@@ -104,7 +104,7 @@ public class RSMapper {
         String firstTableTitle = entity1.getTitle();
 
         ArrayList<ERAttribute> firstTablePrimaryKeys = new ArrayList<>();
-        firstTablePrimaryKeys.add(entity1.getKey());
+        firstTablePrimaryKeys.addAll(entity1.getKey());
 
         ArrayList<ERAttribute> firstTableUnique = new ArrayList<>(entity1.getUniqueAttributes());
         firstTableUnique.remove(entity1.getKey());
@@ -118,7 +118,7 @@ public class RSMapper {
         String secondTableTitle = entity2.getTitle();
 
         ArrayList<ERAttribute> secondTablePrimaryKeys = new ArrayList<>();
-        secondTablePrimaryKeys.add(entity2.getKey());
+        secondTablePrimaryKeys.addAll(entity2.getKey());
 
         ArrayList<ERForeignKey> secondTableForeignKeys = new ArrayList<>();
         secondTableForeignKeys.add(new ERForeignKey(entity1.getKey(),entity1));
@@ -129,7 +129,7 @@ public class RSMapper {
         ArrayList<ERAttribute> secondTableColumns = new ArrayList<>();
         secondTableColumns.addAll(entity2.getUniqueAttributes());
         secondTableColumns.addAll(entity2.getEntityAttributes());
-        secondTableColumns.add(entity1.getKey());
+        secondTableColumns.addAll(entity1.getKey());
 
         ERTable table2 = new ERTable(secondTableTitle, secondTableColumns, secondTablePrimaryKeys, secondTableUnique, secondTableForeignKeys);
 
@@ -145,7 +145,7 @@ public class RSMapper {
         String tableTitle = oneToOne.getEntity1().getTitle() + "-" + oneToOne.getEntity2().getTitle();
 
         ArrayList<ERAttribute> tablePrimaryKeys = new ArrayList<>();
-        tablePrimaryKeys.add(entity1.getKey());
+        tablePrimaryKeys.addAll(entity1.getKey());
 
         ArrayList<ERAttribute> tableUnique= new ArrayList<>();
         tableUnique.addAll(entity1.getUniqueAttributes());

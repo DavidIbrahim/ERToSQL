@@ -77,4 +77,12 @@ public class ERTable {
     public void setForeignKeys(ArrayList<ERForeignKey> foreignKeys) {
         this.foreignKeys = foreignKeys;
     }
+
+    public ArrayList<ERAttribute> getUnique() {
+        return unique;
+    }
+
+    public void setUnique(ArrayList<ERAttribute> unique) {
+        this.unique = unique;
+    }
 }

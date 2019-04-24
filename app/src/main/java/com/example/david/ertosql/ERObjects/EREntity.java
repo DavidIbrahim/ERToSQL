@@ -55,12 +55,16 @@ public class EREntity {
         this.type = type;
     }
 
-    public ERAttribute getKey(){
+    public ArrayList<ERAttribute> getKey(){
+        ArrayList<ERAttribute> key = new ArrayList<>();
         if (uniqueAttributes.isEmpty()){
-             return new ERAttribute(title+"ID");
+            key.add(new ERAttribute(title+"ID"));
         }
         //todo: modify keys later (contains ID)
-        return uniqueAttributes.get(0);
+        else {
+            key.add(uniqueAttributes.get(0));
+        }
+        return key;
     }
 
     @Override
