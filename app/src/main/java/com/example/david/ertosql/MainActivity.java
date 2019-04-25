@@ -2,17 +2,21 @@ package com.example.david.ertosql;
 
 import android.Manifest;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 
 import com.example.david.ertosql.cameraAndImages.OpenCVCamera;
+import com.example.david.ertosql.data.ERDiagramContract;
+import com.example.david.ertosql.data.ERDiagramContract.ERDiagramEntry;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -80,6 +84,28 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+            GridView gridView = (GridView)findViewById(R.id.gridview);
+            ERDiagramsAdapter booksAdapter = new ERDiagramsAdapter(this, null);
+//            gridView.setAdapter(booksAdapter);
+            String[] projection = {
+                    ERDiagramEntry._ID,
+                    ERDiagramEntry.COLUMN_ERDIAGRAM_ORIGINAL_IMAGE,
+                    ERDiagramEntry.COLUMN_ERDIAGRAM_NAME,
+                    ERDiagramEntry.COLUMN_ERDIAGRAM_SQL_CODE,
+                    ERDiagramEntry.COLUMN_RELATIONAL_SCHEMA_IMAGE };
+
+            // Perform a query on the provider using the ContentResolver.
+            // Use the {@link PetEntry#CONTENT_URI} to access the pet data.
+            Cursor cursor = getContentResolver().query(
+                    ERDiagramEntry.CONTENT_URI,   // The content URI of the words table
+                    projection,             // The columns to return for each row
+                    null,                   // Selection criteria
+                    null,                   // Selection criteria
+                    null);
+
+            assert cursor != null;
+            Log.d(TAG,"the number of rows in the database is "+cursor.getCount());
+            cursor.close();
         }
 
 

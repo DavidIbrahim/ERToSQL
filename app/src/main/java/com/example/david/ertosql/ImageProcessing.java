@@ -215,7 +215,7 @@ public class ImageProcessing {
         return mat;
     }
 
-    private static Bitmap convertToBitmap(Mat mat) {
+    public static Bitmap convertToBitmap(Mat mat) {
         Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(mat, bitmap);
         return bitmap;
