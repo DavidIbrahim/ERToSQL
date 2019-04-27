@@ -1,15 +1,11 @@
 package com.example.david.ertosql.ERObjects;
 
 public class ERBinaryRelationship extends ERRelationship {
-     EREntity entity1;
-     EREntity entity2;
+    Participation participation;
+    EREntity entity1;
+    EREntity entity2;
 
     public ERBinaryRelationship() {
-    }
-
-    public ERBinaryRelationship(EREntity entity1, EREntity entity2) {
-        this.entity1 = entity1;
-        this.entity2 = entity2;
     }
 
     public EREntity getEntity1() {
@@ -26,5 +22,36 @@ public class ERBinaryRelationship extends ERRelationship {
 
     public void setEntity2(EREntity entity2) {
         this.entity2 = entity2;
+    }
+
+    public Participation getParticipation() {
+        return participation;
+    }
+
+    public ERBinaryRelationship(String title, EREntity entity1, EREntity entity2){
+        this.entity1 = entity1;
+        this.entity2 = entity2;
+        this.title = title;
+        this.participation = Participation.PARTIAL_PARTIAL;
+    }
+
+    public ERBinaryRelationship(String title, EREntity entity1, EREntity entity2,
+                                ERBinaryRelationship.Participation participation) {
+        this.entity1 = entity1;
+        this.entity2 = entity2;
+        this.title = title;
+        this.participation = participation;
+    }
+
+    @Override
+    public String toString() {
+        return "relationship:" + title +
+                " participation:" + participation.toString() +
+                " firstEntity:" + entity1.toString() +
+                " secondEntity:" + entity2.toString();
+    }
+
+    public enum Participation {
+        TOTAL_TOTAL, PARTIAL_TOTAL, PARTIAL_PARTIAL, ONE_MANY, MANY_MANY
     }
 }

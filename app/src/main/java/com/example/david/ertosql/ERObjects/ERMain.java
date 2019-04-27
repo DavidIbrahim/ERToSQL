@@ -36,7 +36,7 @@ public class ERMain {
         EREntity E1 = new EREntity("Employee", keys1, attributes1);
         EREntity E2 = new EREntity("Department", keys2, attributes2);
 
-        EROneToOneRelationship R1 = new EROneToOneRelationship("Has",E2,E1,EROneToOneRelationship.Participation.PARTIAL_TOTAL);
+        ERBinaryRelationship R1 = new ERBinaryRelationship("Has",E2,E1,ERBinaryRelationship.Participation.PARTIAL_TOTAL);
 
         //System.out.println(R1);
 
@@ -47,12 +47,12 @@ public class ERMain {
         RSMapper rsMapper = new RSMapper(D1);
         ERRelationalSchema relationalSchema = new ERRelationalSchema(rsMapper.getTables());
 
-        System.out.println(relationalSchema);
+        //System.out.println(relationalSchema);
 
         //SQL code
         SQLMapper sqlMapper = new SQLMapper(relationalSchema);
         String SQLCode = sqlMapper.getSQLCode();
 
-        //System.out.println(SQLCode);
+        System.out.println(SQLCode);
     }
 }
