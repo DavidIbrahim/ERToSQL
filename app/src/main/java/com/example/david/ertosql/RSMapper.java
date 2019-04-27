@@ -75,7 +75,7 @@ public class RSMapper {
 
         ArrayList<ERAttribute> thirdTablePrimaryKeys = new ArrayList<>();
         thirdTablePrimaryKeys.addAll(entity1.getKey());
-        thirdTablePrimaryKeys.addAll(entity2.getKey());
+        //thirdTablePrimaryKeys.addAll(entity2.getKey());
 
         ArrayList<ERForeignKey> thirdTableForeignKeys = new ArrayList<>();
         thirdTableForeignKeys.add(new ERForeignKey(entity1.getKey(),entity1));
