@@ -7,18 +7,27 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
+import android.widget.EditText;
 
 import static com.example.david.ertosql.data.ERDiagramContract.*;
 
 public class ERDiagramProvider extends ContentProvider {
 
-    /** Database helper object */
+    private static final String TAG = ERDiagramProvider.class.getSimpleName();
+    /**
+     * Database helper object
+     */
     private ERDiagramDbHelper mDbHelper;
 
-    /** URI matcher code for the content URI for the pets table */
+    /**
+     * URI matcher code for the content URI for the diagrams table
+     */
     private static final int DIAGRAMS = 100;
 
-    /** URI matcher code for the content URI for a single pet in the pets table */
+    /**
+     * URI matcher code for the content URI for a single diagrams in the diagrams table
+     */
     private static final int DIAGRAMS_ID = 101;
 
     /**
@@ -34,18 +43,18 @@ public class ERDiagramProvider extends ContentProvider {
         // should recognize. All paths added to the UriMatcher have a corresponding code to return
         // when a match is found.
 
-        // The content URI of the form "content://com.example.android.pets/pets" will map to the
-        // integer code {@link #PETS}. This URI is used to provide access to MULTIPLE rows
-        // of the pets table.
+        // The content URI of the form "content://com.example.android.diagramss/diagramss" will map to the
+        // integer code {@link #diagrams}. This URI is used to provide access to MULTIPLE rows
+        // of the diagrams table.
         sUriMatcher.addURI(CONTENT_AUTHORITY, PATH_DIAGRAMS, DIAGRAMS);
 
-        // The content URI of the form "content://com.example.android.pets/pets/#" will map to the
+        // The content URI of the form "content://com.example.android.diagrams/diagrams/#" will map to the
         // integer code {@link #DIAGRAMS_ID}. This URI is used to provide access to ONE single row
-        // of the pets table.
+        // of the diagrams table.
         //
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
-        // For example, "content://com.example.android.pets/pets/3" matches, but
-        // "content://com.example.android.pets/pets" (without a number at the end) doesn't match.
+        // For example, "content://com.example.android.diagrams/diagrams/3" matches, but
+        // "content://com.example.android.diagrams/diagrams" (without a number at the end) doesn't match.
         sUriMatcher.addURI(CONTENT_AUTHORITY, PATH_DIAGRAMS + "/#", DIAGRAMS_ID);
     }
 
@@ -57,7 +66,7 @@ public class ERDiagramProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query( Uri uri,  String[] projection,  String selection,  String[] selectionArgs,  String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         // Get readable database
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
@@ -68,15 +77,15 @@ public class ERDiagramProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case DIAGRAMS:
-                // For the PETS code, query the pets table directly with the given
+                // For the DIAGRAMSS code, query the diagrams table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
-                // could contain multiple rows of the pets table.
+                // could contain multiple rows of the diagrams table.
                 cursor = database.query(ERDiagramEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case DIAGRAMS_ID:
-                // For the PET_ID code, extract out the ID from the URI.
-                // For an example URI such as "content://com.example.android.pets/pets/3",
+                // For the DIAGRAMS_ID code, extract out the ID from the URI.
+                // For an example URI such as "content://com.example.android.diagrams/diagrams/3",
                 // the selection will be "_id=?" and the selection argument will be a
                 // String array containing the actual ID of 3 in this case.
                 //
@@ -84,9 +93,9 @@ public class ERDiagramProvider extends ContentProvider {
                 // arguments that will fill in the "?". Since we have 1 question mark in the
                 // selection, we have 1 String in the selection arguments' String array.
                 selection = ERDiagramEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
-                // This will perform a query on the pets table where the _id equals 3 to return a
+                // This will perform a query on the diagrams table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
                 cursor = database.query(ERDiagramEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -94,25 +103,101 @@ public class ERDiagramProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
-        return cursor;    }
-
-    @Override
-    public String getType( Uri uri) {
-        return null;
+        return cursor;
     }
 
     @Override
-    public Uri insert( Uri uri, ContentValues values) {
-        return null;
+    public String getType(Uri uri) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case DIAGRAMS:
+                return ERDiagramEntry.CONTENT_LIST_TYPE;
+            case DIAGRAMS_ID:
+                return ERDiagramEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 
     @Override
-    public int delete( Uri uri,  String selection,  String[] selectionArgs) {
-        return 0;
+    public Uri insert(Uri uri, ContentValues values) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case DIAGRAMS:
+                return insertDiagram(uri, values);
+            default:
+                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+        }
+    }
+
+    private Uri insertDiagram(Uri uri, ContentValues values) {
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Insert the new diagram with the given values
+        long id = database.insert(ERDiagramEntry.TABLE_NAME, null, values);
+        // If the ID is -1, then the insertion failed. Log an error and return null.
+        if (id == -1) {
+            Log.e(TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+
+        // Return the new URI with the ID (of the newly inserted row) appended at the end
+        return ContentUris.withAppendedId(uri, id);
     }
 
     @Override
-    public int update( Uri uri,  ContentValues values,  String selection,  String[] selectionArgs) {
-        return 0;
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case DIAGRAMS:
+                // Delete all rows that match the selection and selection args
+                return database.delete(ERDiagramEntry.TABLE_NAME, selection, selectionArgs);
+            case DIAGRAMS_ID:
+                // Delete a single row given by the ID in the URI
+                selection = ERDiagramEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return database.delete(ERDiagramEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+    }
+
+    @Override
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case DIAGRAMS:
+                return updateDiagram(uri, values, selection, selectionArgs);
+            case DIAGRAMS_ID:
+                // For the ERDIAGRAM_ID code, extract out the ID from the URI,
+                // so we know which row to update. Selection will be "_id=?" and selection
+                // arguments will be a String array containing the actual ID.
+                selection = ERDiagramEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updateDiagram(uri, values, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+    }
+    /**
+     * Update diagrams in the database with the given content values. Apply the changes to the rows
+     * specified in the selection and selection arguments (which could be 0 or 1 or more diagrams).
+     * Return the number of rows that were successfully updated.
+     */
+    private int updateDiagram(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+        // If there are no values to update, then don't try to update the database
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        // Otherwise, get writeable database to update the data
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Returns the number of database rows affected by the update statement
+        return database.update(ERDiagramEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 }
