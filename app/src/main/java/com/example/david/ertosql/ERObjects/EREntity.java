@@ -3,7 +3,7 @@ package com.example.david.ertosql.ERObjects;
 import java.util.ArrayList;
 
 public class EREntity {
-   public String title;
+   String title;
     Type type;
     ArrayList<ERAttribute> uniqueAttributes;
     ArrayList<ERAttribute> entityAttributes;

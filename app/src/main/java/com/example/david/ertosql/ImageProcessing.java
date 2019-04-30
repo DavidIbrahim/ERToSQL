@@ -9,8 +9,11 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.david.ertosql.ERObjects.ERAttribute;
+import com.example.david.ertosql.ERObjects.ERBinaryRelationship;
+import com.example.david.ertosql.ERObjects.ERDiagram;
 import com.example.david.ertosql.ERObjects.EREntity;
-import com.example.david.ertosql.ERObjects.EROneToOneRelationship;
+
+import com.example.david.ertosql.ERObjects.ERRelationship;
 import com.example.david.ertosql.er.shapes.ERElipse;
 import com.example.david.ertosql.er.shapes.ERLine;
 import com.google.android.gms.vision.Frame;
@@ -59,7 +62,8 @@ import static org.opencv.imgproc.Imgproc.putText;
 
 public class ImageProcessing {
 
-    private static Context context=null;
+    private static Context contextt=null;
+    private static Mat original=null;
     private final static String IMAGE_PROCESSING_TAG = ImageProcessing.class.getSimpleName();
     /**
      * this variable holds all test pictures
@@ -104,7 +108,9 @@ public class ImageProcessing {
                    // Mat tocamera=originalImage.clone();
                     //
                     // Mat toline=new Mat();
-                   merge(originalImage,context);
+                    contextt=context;
+                    original=originalImage;
+                   merge();
                    //Imgproc.cvtColor(tocamera,tocamera,Imgproc.COLOR_GRAY2RGB);
                    // ArrayList<ERRectangle> rec = getRectangles(originalImage,tocamera,context);
                    // ArrayList<ERElipse> elipses=getEllipse(copy_original,originalImage,to_Rhombus,tocamera,context);
@@ -352,8 +358,8 @@ public class ImageProcessing {
                          ERShape.ERPoint center = new ERShape.ERPoint(rec.x + (rec.width / 2), rec.y + (rec.height / 2));
 
                          String text = getStringFromImage(cut, context);
-                         text=text.replaceAll(" ","");
-                         text=text.replaceAll(".","");
+                        text=text.replaceAll(" ","");
+                        // text=text.replaceAll(".","");
                          //  String text = "sara";
                          ERRectangle e = new ERRectangle(center, text);
                          erRectangles.add(e);
@@ -414,7 +420,7 @@ public class ImageProcessing {
                          ERShape.ERPoint center = new ERShape.ERPoint(rec.x + (rec.width / 2), rec.y + (rec.height / 2));
                          String text = getStringFromImage(cut, context);
                          text=text.replaceAll(" ","");
-                         text=text.replaceAll(".","");
+                       //  text=text.replaceAll(".","");
                          Boolean flag=there_is_line(cut);
                          ERElipse e = new ERElipse(center, text,flag);
                          erElipses.add(e);
@@ -468,7 +474,7 @@ public class ImageProcessing {
 
                          String text = getStringFromImage(cut, context);
                          text=text.replaceAll(" ","");
-                         text=text.replaceAll(".","");
+                    //     text=text.replaceAll(".","");
                          ERRhombus e = new ERRhombus(center, text);
                          erRhombuses.add(e);
                          c.add(cnt);
@@ -772,28 +778,29 @@ public class ImageProcessing {
              }
 
 
-             private static void merge (Mat pic, Context context)
+             private static ERDiagram merge ()
              {
+                 Mat pic=original;
                  Mat to_Rhombus = new Mat();
                  Mat copy_original = pic.clone();
                  Mat tocamera = pic.clone();
                  Mat toline = new Mat();
 
                  Imgproc.cvtColor(tocamera, tocamera, Imgproc.COLOR_GRAY2RGB);
-                 ArrayList<ERRectangle> rec = getRectangles(pic, tocamera, context);
+                 ArrayList<ERRectangle> rec = getRectangles(pic, tocamera, contextt);
 
                  ArrayList<ERShape.ERShapeWZCenter> REC = new ArrayList<>();
                  for (int i = 0; i < rec.size(); i++) {
                      REC.add(rec.get(i));
                  }
-                 ArrayList<ERElipse> elipses = getEllipse(copy_original, pic, to_Rhombus, tocamera, context);
-                 ArrayList<ERRhombus> erRhombuses = getRhombus(copy_original, pic, to_Rhombus, tocamera, context);
+                 ArrayList<ERElipse> elipses = getEllipse(copy_original, pic, to_Rhombus, tocamera, contextt);
+                 ArrayList<ERRhombus> erRhombuses = getRhombus(copy_original, pic, to_Rhombus, tocamera, contextt);
                  ArrayList<ERLine> lines = getLines(pic,tocamera);
                  Map<ERShape.ERShapeWZCenter, ArrayList<ERShape.ERShapeWZCenter>> atrr = new HashMap<>();
                  Map<ERShape.ERShapeWZCenter, ArrayList<ERShape.ERShapeWZCenter>> relation = new HashMap<>();
                  Map<ERShape.ERShapeWZCenter, ArrayList<ERShape.ERShapeWZCenter>> uni = new HashMap<>();
                  ArrayList<ERShape.ERShapeWZCenter> totale = new ArrayList<>();
-
+                 Map<ERShape.ERShapeWZCenter, ArrayList<ERShape.ERShapeWZCenter>> tot = new HashMap<>();
                  for (int i = 0; i < lines.size(); i++) {
                      ERShape.ERShapeWZCenter minrec = min_disrance_rectangle(lines.get(i), rec);
                      ERShape.ERShapeWZCenter connect = min_distance_shapes(lines.get(i), elipses, erRhombuses);
@@ -820,15 +827,22 @@ public class ImageProcessing {
                              tempe.add(minrec);
                              relation.put(connect, tempe);
 
-                         } else if (relation.get(connect).contains(minrec)) {
+                         } else if (relation.get(connect).contains(minrec)&&!tot.containsKey(connect)) {
+                             ArrayList<ERShape.ERShapeWZCenter> tempe = new ArrayList<>();
+                             tempe.add(minrec);
+                             tot.put(connect, tempe);
                              totale.add(minrec);
+
+                         }else if(relation.get(connect).contains(minrec)){
+                             tot.get(connect).add(minrec);
                          } else {
                              relation.get(connect).add(minrec);
                          }
                      }
 
                  }
-                 ArrayList<EROneToOneRelationship> erRelationships = new ArrayList<>();
+
+                 ArrayList<ERRelationship> erRelationships = new ArrayList<>();
                  ArrayList<EREntity> erEntities = new ArrayList<>();
                  // ArrayList<ERAttribute> erAttributes=new ArrayList<>();
 
@@ -862,7 +876,7 @@ public class ImageProcessing {
                      ArrayList<ERShape.ERShapeWZCenter> T= relation.get(erRhombuses.get(j));
                      for(int i=0;i<T.size();i++) {
                          for(int k=0;k<erEntities.size();k++) {
-                             if (T.get(i).getText() == erEntities.get(k).title) {
+                             if (T.get(i).getText() == erEntities.get(k).getTitle()) {
                                  if(e1==null) {
                                      if(totale.contains(T.get(i)))
                                          toe1=true;
@@ -876,17 +890,18 @@ public class ImageProcessing {
                          }
                      }
                      if(toe1&&toe2)
-                         erRelationships.add(new EROneToOneRelationship(erRhombuses.get(j).getText(),e1,e2, EROneToOneRelationship.Participation.TOTAL_TOTAL));
-                         else if(toe1&&!toe2)
-                         erRelationships.add(new EROneToOneRelationship(erRhombuses.get(j).getText(),e1,e2, EROneToOneRelationship.Participation.TOTAL_PARTIAL));
+                         erRelationships.add(new ERBinaryRelationship(erRhombuses.get(j).getText(),e1,e2,ERBinaryRelationship.Participation.TOTAL_TOTAL));
+                         else if(!toe1&&toe2)
+                         erRelationships.add(new ERBinaryRelationship(erRhombuses.get(j).getText(),e1,e2,ERBinaryRelationship.Participation.PARTIAL_TOTAL));
                          else
-                         erRelationships.add(new EROneToOneRelationship(erRhombuses.get(j).getText(),e1,e2, EROneToOneRelationship.Participation.PARTIAL_PARTIAL));
+                         erRelationships.add(new ERBinaryRelationship(erRhombuses.get(j).getText(),e1,e2, ERBinaryRelationship.Participation.PARTIAL_PARTIAL));
 
 
 
                  }
 
                  //  Log.d("keyyy", relation.keySet().toString());
+                 ERDiagram erDiagram=new ERDiagram("DIAGRAM1",erRelationships);
                    Log.d("test", erRelationships.toString());
     /* ArrayList<ERShape> atr=new ArrayList<>();
       for(ERShape key:atrr.keySet())
@@ -896,7 +911,7 @@ public class ImageProcessing {
           break;
       }*/
                  tocamera.assignTo(pic);
-
+                  return erDiagram;
              }
 
 
