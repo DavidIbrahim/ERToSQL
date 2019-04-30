@@ -3,10 +3,14 @@ package com.example.david.ertosql.ERObjects;
 import com.example.david.ertosql.RSMapper;
 import com.example.david.ertosql.SQLMapper;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ERMain {
-    public static void main(String args[]) {
+    public static void main(String args[]) throws IOException{
         //Creating Simple Attributes
         ERAttribute K2 = new ERAttribute("DepID");
         ERAttribute A3 = new ERAttribute("Name");
@@ -43,16 +47,47 @@ public class ERMain {
         //ER Diagram
         ERDiagram D1 = new ERDiagram("Diagram 1", R1);
 
-        //Relational Schema
-        RSMapper rsMapper = new RSMapper(D1);
+//        //Relational Schema
+//        RSMapper rsMapper = new RSMapper(D1);
+//        ERRelationalSchema relationalSchema = new ERRelationalSchema(rsMapper.getTables());
+//
+//        //System.out.println(relationalSchema);
+//
+//        //SQL code
+//        SQLMapper sqlMapper = new SQLMapper(relationalSchema);
+//        String SQLCode = sqlMapper.getSQLCode();
+
+        String outputFile = "E:\\ProjectDIP\\ERToSQL\\app\\src\\main\\java\\com\\example\\david\\ertosql\\ERObjects\\result.txt";
+        String SQLCode = getSQLFromDiagram(D1);
+        //System.out.println(SQLCode);
+        writeFile(outputFile,SQLCode);
+    }
+
+    public static String getSQLFromDiagram(ERDiagram erDiagram){
+
+        RSMapper rsMapper = new RSMapper(erDiagram);
         ERRelationalSchema relationalSchema = new ERRelationalSchema(rsMapper.getTables());
 
         //System.out.println(relationalSchema);
 
         //SQL code
         SQLMapper sqlMapper = new SQLMapper(relationalSchema);
-        String SQLCode = sqlMapper.getSQLCode();
 
-        System.out.println(SQLCode);
+        return sqlMapper.getSQLCode();
+
+    }
+    public static void writeFile(String filePath, String content) throws IOException {
+        BufferedWriter output = null;
+        try {
+            File file = new File(filePath);
+            output = new BufferedWriter(new FileWriter(file));
+            output.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (output != null) {
+                output.close();
+            }
+        }
     }
 }
