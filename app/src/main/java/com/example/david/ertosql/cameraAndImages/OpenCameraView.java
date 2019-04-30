@@ -99,7 +99,7 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
             FileOutputStream fos = new FileOutputStream(mPictureFileName);
             bm.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.close();
-            galleryAddPic();
+            //galleryAddPic();
             Log.d(TAG,"savedPicture successfully");
         } catch (java.io.IOException e) {
             Log.e("PictureDemo", "Exception in photoCallback", e);
@@ -115,12 +115,5 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
             return bmOut;
         }
         return bm;
-    }
-    private void galleryAddPic() {
-
-        Intent intent =
-                new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        intent.setData(Uri.fromFile(new File(mPictureFileName)));
-        context.sendBroadcast(intent);
     }
 }

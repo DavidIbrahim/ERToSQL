@@ -1,6 +1,9 @@
 package com.example.david.ertosql.cameraAndImages;
 
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,6 +18,9 @@ import com.example.david.ertosql.cameraAndImages.utils.Constants;
 import com.example.david.ertosql.cameraAndImages.utils.FolderUtil;
 import com.example.david.ertosql.cameraAndImages.utils.ImagePreprocessor;
 import com.example.david.ertosql.cameraAndImages.utils.Utilities;
+import com.example.david.ertosql.data.DbBitMapUtility;
+import com.example.david.ertosql.data.ERDiagramContract;
+import com.example.david.ertosql.data.ERDiagramDbHelper;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -24,9 +30,13 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
 import java.io.File;
+import java.io.IOException;
+
+import static com.example.david.ertosql.ImageProcessing.convertToBitmap;
+import static com.example.david.ertosql.data.ERDiagramContract.*;
 
 
-public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2{
+public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
     private static final String TAG = OpenCVCamera.class.getSimpleName();
 
@@ -67,13 +77,13 @@ public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewB
         cameraBridgeViewBase.disableFpsMeter();
 
 
-
-        ImageView takePictureBtn = (ImageView)findViewById(R.id.take_picture);
+        ImageView takePictureBtn = (ImageView) findViewById(R.id.take_picture);
         takePictureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String outPicture = Constants.SCAN_IMAGE_LOCATION + File.separator + Utilities.generateFilename();
                 FolderUtil.createDefaultFolder(Constants.SCAN_IMAGE_LOCATION);
+                insertPic();
 
                 cameraBridgeViewBase.takePicture(outPicture);
                 Toast.makeText(OpenCVCamera.this, "Picture has been taken ", Toast.LENGTH_LONG).show();
@@ -82,6 +92,23 @@ public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewB
         });
     }
 
+    private void insertPic()   {
+        // Create database helper
+
+        // Gets the database in write mode
+        ContentValues values = new ContentValues();
+        try {
+            values.put(ERDiagramEntry.COLUMN_ERDIAGRAM_ORIGINAL_IMAGE, DbBitMapUtility.getBytes(convertToBitmap(colorRgba)));
+            values.put(ERDiagramEntry.COLUMN_ERDIAGRAM_NAME,"Untitled");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Insert a new row for diagram in the database, returning the ID of that new row.
+        Uri newUri = getContentResolver().insert(ERDiagramEntry.CONTENT_URI, values);
+        Toast.makeText(this, "image saved in db with id "+newUri.getPath(), Toast.LENGTH_SHORT).show();
+
+    }
 
 
     @Override
@@ -92,7 +119,7 @@ public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewB
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         if (!OpenCVLoader.initDebug()) {
             Log.d(TAG, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
@@ -110,7 +137,6 @@ public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewB
     }
 
 
-
     @Override
     public void onCameraViewStarted(int width, int height) {
         colorRgba = new Mat(height, width, CvType.CV_8UC4);
@@ -123,7 +149,7 @@ public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewB
 
     @Override
     public void onCameraViewStopped() {
-        Log.d(TAG,"onCameraViewStopped");
+        Log.d(TAG, "onCameraViewStopped");
 
         colorRgba.release();
     }
