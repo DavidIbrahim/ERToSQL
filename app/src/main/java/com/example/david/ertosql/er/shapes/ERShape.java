@@ -48,8 +48,8 @@ public interface ERShape {
         }
         public static void set_tolerance(double width, double height)
         {
-            x_tolerance=(int)width/50;
-            y_tolerance=(int)height/50;
+            x_tolerance=(int)width/35;
+            y_tolerance=(int)height/35;
         }
 
         public static boolean isclose (ERPoint a, ERPoint b)

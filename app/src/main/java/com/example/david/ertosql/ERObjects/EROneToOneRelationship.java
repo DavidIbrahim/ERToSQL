@@ -3,7 +3,7 @@ package com.example.david.ertosql.ERObjects;
 import java.util.HashMap;
 
 public class EROneToOneRelationship extends ERBinaryRelationship {
-    Participation participation;
+     Participation participation;
 
     public Participation getParticipation() {
         return participation;

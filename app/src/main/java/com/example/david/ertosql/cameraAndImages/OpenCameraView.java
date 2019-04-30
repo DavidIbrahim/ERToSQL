@@ -1,5 +1,6 @@
 package com.example.david.ertosql.cameraAndImages;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -80,6 +81,7 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
     }
 
 
+    @SuppressLint("WrongThread")
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
         Log.i(TAG, "Saving a bitmap to file");

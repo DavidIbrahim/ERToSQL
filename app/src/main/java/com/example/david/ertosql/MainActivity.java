@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      *  True for testing ImageProcessing class only
      */
-    private static final boolean  TESTING = false;
+    private static final boolean  TESTING = true;
     private static final String TAG= MainActivity.class.getSimpleName();
 
     static {

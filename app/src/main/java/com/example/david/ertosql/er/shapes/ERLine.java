@@ -2,18 +2,18 @@ package com.example.david.ertosql.er.shapes;
 import static com.example.david.ertosql.er.shapes.ERShape.ERPoint.isclose;
 public class ERLine implements ERShape {
     private ERPoint start, end;
-    private double slope , c ;
-    private static double slope_tolerance;
-    private static double c_tolerance;
+   // private double slope , c ;
+    //private static double slope_tolerance;
+    //private static double c_tolerance;
 
 
     public ERLine(ERPoint start, ERPoint end) {
         this.start = start;
         this.end = end;
-        if (start.get_x()==end.get_x())
+      /*  if (start.get_x()==end.get_x())
             slope=500;
         else slope=((start.get_y()-end.get_y())/(start.get_x()-end.get_x()));
-        c = start.get_y()-(start.get_x()*slope) ;
+        c = start.get_y()-(start.get_x()*slope) ;*/
     }
     public ERPoint get_start()
     {
@@ -23,7 +23,7 @@ public class ERLine implements ERShape {
     {
         return end;
     }
-    public double get_slope()
+  /*  public double get_slope()
     {
         return slope;
     }
@@ -39,8 +39,8 @@ public class ERLine implements ERShape {
 
     public static void set_slope_c_tolerance(double width,double height)
     {
-        slope_tolerance=height/width;
-        c_tolerance=height/15;
+        slope_tolerance=(height/width)+0.7;
+        c_tolerance=height/10;
     }
 
     public static boolean ExtendLine (ERLine v,ERLine s)
@@ -94,7 +94,7 @@ public class ERLine implements ERShape {
         }
         return false ;
     }
-
+*/
     @Override
     public double calculateDistance(ERShape shape) {
         if(shape instanceof ERShapeWZCenter){

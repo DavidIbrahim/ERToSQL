@@ -79,6 +79,9 @@ public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewB
                 cameraBridgeViewBase.takePicture(outPicture);
                 Toast.makeText(OpenCVCamera.this, "Picture has been taken ", Toast.LENGTH_LONG).show();
                 Log.d(TAG, "Path " + outPicture);
+                //todo sara
+
+
             }
         });
     }
