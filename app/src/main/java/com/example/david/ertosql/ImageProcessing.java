@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 
+import static com.example.david.ertosql.ERObjects.ERMain.getSQLFromDiagram;
 import static java.lang.Math.abs;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -98,29 +99,15 @@ public class ImageProcessing {
                 if (TEST_A_METHOD_RETURNS_IMAGE) {
                     //todo change exampleOnUsingOpenCV wz ur own method if it returns a pic to test it
 
-                    Mat convertedImageMat = get_lines_test(originalImage);
-                    imageView.setImageBitmap(convertToBitmap(convertedImageMat));
+                  //  Mat convertedImageMat = get_lines_test(originalImage);
+                   // imageView.setImageBitmap(convertToBitmap(convertedImageMat));
                 } else {
                     //todo test ur own code here if it doesn't return an image
-                    //this is an example
-                //    Mat to_Rhombus=new Mat();
-                  //  Mat copy_original=originalImage.clone();
-                   // Mat tocamera=originalImage.clone();
-                    //
-                    // Mat toline=new Mat();
+
                     contextt=context;
                     original=originalImage;
                    merge();
-                   //Imgproc.cvtColor(tocamera,tocamera,Imgproc.COLOR_GRAY2RGB);
-                   // ArrayList<ERRectangle> rec = getRectangles(originalImage,tocamera,context);
-                   // ArrayList<ERElipse> elipses=getEllipse(copy_original,originalImage,to_Rhombus,tocamera,context);
-                   // Mat test=there_is_line(to_Rhombus);
-                   // ArrayList<ERRhombus> erRhombuses=getRhombus(copy_original,originalImage,to_Rhombus,tocamera,context);
-                   //
-                     //Mat kiro=originalImage.clone();
 
-                   // ArrayList<ERLine> lines =getLines(originalImage);
-                   // Log.d(IMAGE_PROCESSING_TAG, "Testing with Image : " + i + '\n' + lines.toString());
                     imageView.setImageBitmap(convertToBitmap(originalImage));
                    // Log.d("textt", elipses.toString());
                 }
@@ -254,30 +241,7 @@ public class ImageProcessing {
         for (int j=0;j<ce.size();j++){
             Imgproc.drawContours(orig,ce,j,new Scalar(255,0,0),5);
         }
-        //rhombus
-      /*   List<MatOfPoint> contourr = new ArrayList<>();
-         Imgproc.findContours(imge, contourr, new Mat(), Imgproc.CV_SHAPE_RECT, Imgproc.CHAIN_APPROX_NONE);
-         MatOfPoint2f approxCurver = new MatOfPoint2f();
-         ArrayList<MatOfPoint> cr=new ArrayList<>();
-
-         for (MatOfPoint cnt : contourr) {
-
-             MatOfPoint2f curve = new MatOfPoint2f(cnt.toArray());
-
-             Imgproc.approxPolyDP(curve, approxCurver, 0.1 * Imgproc.arcLength(curve, true), true);
-
-             int numberVertices = (int) approxCurver.total();
-             if(numberVertices>3&&numberVertices<9&&Imgproc.contourArea(cnt)>1000) {
-
-               //  Imgproc.fillPoly(img, Collections.singletonList(cnt), new Scalar(0, 0, 0));
-
-                 cr.add(cnt);
-
-
-             }
-
-         }*/
-      Mat ma=new Mat();
+          Mat ma=new Mat();
         for (int j=0;j<cr.size();j++){
             Imgproc.drawContours(orig,cr,j,new Scalar(0,255,0),5);
         }
@@ -358,6 +322,7 @@ public class ImageProcessing {
                          ERShape.ERPoint center = new ERShape.ERPoint(rec.x + (rec.width / 2), rec.y + (rec.height / 2));
 
                          String text = getStringFromImage(cut, context);
+
                         text=text.replaceAll(" ","");
                         // text=text.replaceAll(".","");
                          //  String text = "sara";
@@ -401,6 +366,7 @@ public class ImageProcessing {
                  Mat cut = null;
                  int count = 0;
                  ArrayList<MatOfPoint> c = new ArrayList<>();
+
                  for (MatOfPoint cnt : contour) {
 
                      MatOfPoint2f curve = new MatOfPoint2f(cnt.toArray());
@@ -419,7 +385,8 @@ public class ImageProcessing {
                          // boolean check=there_is_line(cut);
                          ERShape.ERPoint center = new ERShape.ERPoint(rec.x + (rec.width / 2), rec.y + (rec.height / 2));
                          String text = getStringFromImage(cut, context);
-                         text=text.replaceAll(" ","");
+                         text=text.replace(" ","");
+                         text=text.replace(".","");
                        //  text=text.replaceAll(".","");
                          Boolean flag=there_is_line(cut);
                          ERElipse e = new ERElipse(center, text,flag);
@@ -487,27 +454,12 @@ public class ImageProcessing {
                      Imgproc.drawContours(tocamera, c, j, new Scalar(0, 255, 0), 5);
                  }
                  Log.d("3dd_r", String.valueOf(count));
-//         Mat kernel=Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT,new Size(2,2));
-//                 Imgproc.dilate(mat,mat,kernel);
-//       Mat k=Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT,new Size(4,4));
-//       Imgproc.morphologyEx(mat,mat,Imgproc.MORPH_OPEN,k);
-//
-//       Imgproc.erode(mat,mat,kernel);
-
-
                  return erRhombuses;
 
              }
              public static Boolean there_is_line (Mat src) //function to know whether there is any line or not
              {
-               //  Mat kernel=Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT,new Size(20,1));
-                  // Imgproc.erode(src,src,kernel);
-              //   List<MatOfPoint> contour = new ArrayList<>();
-               //  Imgproc.findContours(src, contour, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
-              //   Log.d("kam wa7d", String.valueOf(contour.size()));
-                //     Imgproc.drawContours(src,contour,-1,new Scalar(0,0,0),40);
-               //  Mat kernel=Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT,new Size(5,1));
-                 // Imgproc.erode(src,src,kernel);
+
                  List<MatOfPoint> contourr = new ArrayList<>();
                  List<MatOfPoint2f> newContours = new ArrayList<>();
                  Imgproc.findContours(src, contourr, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
@@ -515,8 +467,7 @@ public class ImageProcessing {
                      MatOfPoint2f newPoint = new MatOfPoint2f(point.toArray());
                      newContours.add(newPoint);
                  }
-                   //  Imgproc.fillPoly(src, Collections.singletonList(contour.get(0)), new Scalar(0, 0, 0));
-                    // contour.get(0);
+
 
                  Boolean rep=false;
                  for (MatOfPoint2f cnt : newContours) {
@@ -526,8 +477,8 @@ public class ImageProcessing {
                      rec.points(vertices);
                      double distx=abs(vertices[0].x-vertices[2].x);
                      double disty=abs(vertices[0].y-vertices[2].y);
-                     Log.d("kam wa7d_x", String.valueOf(distx));
-                     Log.d("kam wa7d_y", String.valueOf(disty));
+                   //  Log.d("kam wa7d_x", String.valueOf(distx));
+                    // Log.d("kam wa7d_y", String.valueOf(disty));
                     if(distx>3*disty&&disty!=0)
                          rep=true;
 
@@ -557,27 +508,12 @@ public class ImageProcessing {
             Point[] vertices = new Point[4];
             rec.points(vertices);
 
-
-
-          //  double x2=rec.boundingRect().x;
-           // double y2=rec.boundingRect().y;
-           // double x1=2*rec.center.x-x2;
-           // double y1=2*rec.center.y-y2;
-           // double length=(rec.size.height>rec.size.width)? rec.size.height:rec.size.width;
-          //  double x2=rec.center.x-((length/2)*cos(rec.angle+180));
-            //double y2=rec.center.y+((length/2)*sin(rec.angle+180));
-            //double x1=rec.center.x+((length/2)*cos(rec.angle+180));
-            //double y1=rec.center.y+((length/2)*sin(rec.angle+180));
                Point start = vertices[0];
                Point end=vertices[2];
             ERShape.ERPoint s=new ERShape.ERPoint(start.x,start.y);
             ERShape.ERPoint e=new ERShape.ERPoint(end.x,end.y);
                ERLine l=new ERLine(s,e);
                erLine.add(l);
-
-            //   putText(src, "s", start, 3, 3, new Scalar(255, 255, 255),3);
-              //  putText(src, "E", end, 3, 3, new Scalar(255, 255, 255),3);
-           // Log.d("angle", String.valueOf(rec.angle));
 
             count++;
 
@@ -594,108 +530,9 @@ public class ImageProcessing {
 
           return erLine;
     }
-         /*   private static ArrayList<ERLine> getLines (Mat src){
-                 //todo kero   implement the method
 
-                 //erLines.add(new ERLine(new ERShape.ERPoint(2, 2), new ERShape.ERPoint(3, 4)));
-                 double wid = src.size().height;
-                 double hei = src.size().width;
-                 Log.d("m2as el sora", String.valueOf(wid)+String.valueOf(hei));
-                 set_tolerance(wid, hei);
-                 set_slope_c_tolerance(wid, hei);
-                 Mat dst = new Mat();
-                 Mat cdstP = new Mat();
-                 Imgproc.Canny(src, dst, 50, 200, 3, false);
-                 Imgproc.cvtColor(dst, cdstP, Imgproc.COLOR_GRAY2BGR);
-                 Mat linesP = new Mat(); // will hold the results of the detection
-                 Imgproc.HoughLinesP(dst, linesP, 1, Math.PI / 180, 20, 10, 5); // runs the actual detection
-                 ArrayList<ERLine> erLine = new ArrayList<ERLine>();
-                 for (int x = 0; x < linesP.rows(); x++) {
-                     double[] l = linesP.get(x, 0);
-                     ERLine l1 = new ERLine(new ERShape.ERPoint(l[0], l[1]), new ERShape.ERPoint(l[2], l[3]));
-                     erLine.add(l1);
-                 }
-                 boolean flag = false;
-                 for (int j = 0; j < erLine.size(); j++) {
-                     flag = false;
-                     int ff = erLine.size();
-                     for (int i = j + 1; i < erLine.size(); i++) {
-
-                         if ((ExtendLine(erLine.get(i), erLine.get(j))) || (InsideLine(erLine.get(i), erLine.get(j)))) {
-                             ERShape.ERPoint p1 = new ERShape.ERPoint(0, 0);
-                             ERShape.ERPoint p2 = new ERShape.ERPoint(0, 0);
-                             if (erLine.get(i).get_slope() == 500) {
-                                 p2 = most_y(erLine.get(i).get_start(), erLine.get(i).get_end(), erLine.get(j).get_start(), erLine.get(j).get_end());
-                                 p1 = least_y(erLine.get(i).get_start(), erLine.get(i).get_end(), erLine.get(j).get_start(), erLine.get(j).get_end());
-                             } else {
-                                 p2 = most_x(erLine.get(i).get_start(), erLine.get(i).get_end(), erLine.get(j).get_start(), erLine.get(j).get_end());
-                                 p1 = least_x(erLine.get(i).get_start(), erLine.get(i).get_end(), erLine.get(j).get_start(), erLine.get(j).get_end());
-                             }
-                             ERLine ged = new ERLine(p1, p2);
-                             if (ged.get_slope() == 500 && erLine.get(i).get_slope() != 500 && erLine.get(j).get_slope() != 500) {
-                                 ged.set_slope_c(erLine.get(i).get_slope(), erLine.get(i).get_c());
-                             }
-                             if (erLine.get(i).get_slope() == 500) {
-                                 ged.set_slope_c(500, erLine.get(i).get_c());
-                             }
-                             if (erLine.get(j).get_slope() == 500) {
-                                 ged.set_slope_c(500, erLine.get(j).get_c());
-                             }
-                             erLine.remove(i);
-                             erLine.remove(j);
-                             erLine.add(0, ged);
-                             flag = true;
-                         }
-                         if (flag)
-                             break;
-                     }
-                     if (flag)
-                         j = -1;
-
-                 }
-                 for(int i=0;i<erLine.size();i++) {
-                     Log.d("liness", erLine.get(i).toString());
-                     Imgproc.line(cdstP, new Point(erLine.get(i).get_start().x,erLine.get(i).get_start().y),new Point(erLine.get(i).get_end().x,erLine.get(i).get_end().y), new Scalar(0, 0, 255), 3, Imgproc.LINE_AA, 0);
-
-                 }
-
-                 return erLine;
-                 ArrayList<ERLine> erLine = new ArrayList<>();
-                 ERLine l=new ERLine(new ERShape.ERPoint(386,500),new ERShape.ERPoint(570,175));
-                 erLine.add(l);
-                 l=new ERLine(new ERShape.ERPoint(386,500),new ERShape.ERPoint(250,165));
-                 erLine.add(l);
-                 l=new ERLine(new ERShape.ERPoint(386,500),new ERShape.ERPoint(1000,560));
-                 erLine.add(l);
-                 l=new ERLine(new ERShape.ERPoint(386,500),new ERShape.ERPoint(125,870));
-                 erLine.add(l);
-                 l=new ERLine(new ERShape.ERPoint(386,500),new ERShape.ERPoint(455,920));
-                 erLine.add(l);
-                 l=new ERLine(new ERShape.ERPoint(1700,615),new ERShape.ERPoint(1545,285));
-                 erLine.add(l);
-                 l=new ERLine(new ERShape.ERPoint(1700,615),new ERShape.ERPoint(1915,255));
-                 erLine.add(l);
-                 l=new ERLine(new ERShape.ERPoint(1700,615),new ERShape.ERPoint(1000,560));
-                 erLine.add(l);
-                 return erLine;
-             }*/
              //method to show the detected lines
-             public static Mat get_lines_test (Mat src)
-             {
-                 Mat dst = new Mat();
-                 Mat cdstP = new Mat();
-                 Imgproc.Canny(src, dst, 50, 200, 3, false);
-                 Imgproc.cvtColor(dst, cdstP, Imgproc.COLOR_GRAY2BGR);
-                 Mat linesP = new Mat(); // will hold the results of the detection
-                 Imgproc.HoughLinesP(dst, linesP, 1, Math.PI / 180, 20, 10, 5); // runs the actual detection
-// ArrayList<Linek> Lineks = new ArrayList<Linek>(1);
-                 for (int x = 0; x < linesP.rows(); x++) {
-                     double[] l = linesP.get(x, 0);
-                     Imgproc.line(cdstP, new Point(l[0], l[1]), new Point(l[2], l[3]), new Scalar(0, 0, 255), 3, Imgproc.LINE_AA, 0);
-                 }
 
-                 return cdstP;
-             }
 
              private static String getStringFromImage (Mat mat, Context c){
                  StringBuilder sb = new StringBuilder();
@@ -730,16 +567,6 @@ public class ImageProcessing {
                  Utils.matToBitmap(mat, bitmap);
                  return bitmap;
              }
-
-   /* private static ArrayList<ERShape> extractAllShapes(Mat originalImage) {
-        ArrayList<ERShape> erShapes = new ArrayList<>();
-        ArrayList<ERRectangle> rectangleArrayList = getRectangles(originalImage);
-
-
-
-        return erShapes;
-    }*/
-
              private static ERShape.ERShapeWZCenter min_disrance_rectangle (ERLine
              line, ArrayList < ERRectangle > rec)
              {
@@ -796,6 +623,11 @@ public class ImageProcessing {
                  ArrayList<ERElipse> elipses = getEllipse(copy_original, pic, to_Rhombus, tocamera, contextt);
                  ArrayList<ERRhombus> erRhombuses = getRhombus(copy_original, pic, to_Rhombus, tocamera, contextt);
                  ArrayList<ERLine> lines = getLines(pic,tocamera);
+           //      ERShape.ERPoint s=new ERShape.ERPoint(2598.00020960769,975.0001876281872);
+             //    ERShape.ERPoint e=new ERShape.ERPoint(2757.24637242356,940.9694168640003);
+               //  ERLine copyLine=new ERLine(s,e);
+                 //lines.add(copyLine);
+                 //Log.d("lines", lines.toString());
                  Map<ERShape.ERShapeWZCenter, ArrayList<ERShape.ERShapeWZCenter>> atrr = new HashMap<>();
                  Map<ERShape.ERShapeWZCenter, ArrayList<ERShape.ERShapeWZCenter>> relation = new HashMap<>();
                  Map<ERShape.ERShapeWZCenter, ArrayList<ERShape.ERShapeWZCenter>> uni = new HashMap<>();
@@ -841,7 +673,7 @@ public class ImageProcessing {
                      }
 
                  }
-
+                 Log.d("test tot", tot.toString());
                  ArrayList<ERRelationship> erRelationships = new ArrayList<>();
                  ArrayList<EREntity> erEntities = new ArrayList<>();
                  // ArrayList<ERAttribute> erAttributes=new ArrayList<>();
@@ -911,9 +743,16 @@ public class ImageProcessing {
           break;
       }*/
                  tocamera.assignTo(pic);
+                 String sqltest=getSQLFromDiagram(erDiagram);
+                 Log.d("SQLTEST", sqltest);
                   return erDiagram;
              }
 
-
+       public static String getSQLcode()
+       {
+           ERDiagram erDiagram=merge();
+           String sqltest=getSQLFromDiagram(erDiagram);
+           return sqltest;
+       }
          }
 
