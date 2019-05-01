@@ -1,8 +1,8 @@
-package com.example.david.ertosql.cameraAndImages;
+package com.example.david.ertosql;
 
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +13,12 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.david.ertosql.R;
+import com.example.david.ertosql.cameraAndImages.OpenCameraView;
 import com.example.david.ertosql.cameraAndImages.utils.Constants;
 import com.example.david.ertosql.cameraAndImages.utils.FolderUtil;
 import com.example.david.ertosql.cameraAndImages.utils.ImagePreprocessor;
 import com.example.david.ertosql.cameraAndImages.utils.Utilities;
 import com.example.david.ertosql.data.DbBitMapUtility;
-import com.example.david.ertosql.data.ERDiagramContract;
-import com.example.david.ertosql.data.ERDiagramDbHelper;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -36,9 +34,9 @@ import static com.example.david.ertosql.ImageProcessing.convertToBitmap;
 import static com.example.david.ertosql.data.ERDiagramContract.*;
 
 
-public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
+public class TakeDiagramPicActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
-    private static final String TAG = OpenCVCamera.class.getSimpleName();
+    private static final String TAG = TakeDiagramPicActivity.class.getSimpleName();
 
     private OpenCameraView cameraBridgeViewBase;
 
@@ -67,6 +65,7 @@ public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_open_cvcamera);
 
@@ -81,13 +80,10 @@ public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewB
         takePictureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String outPicture = Constants.SCAN_IMAGE_LOCATION + File.separator + Utilities.generateFilename();
-                FolderUtil.createDefaultFolder(Constants.SCAN_IMAGE_LOCATION);
+
                 insertPic();
 
-                cameraBridgeViewBase.takePicture(outPicture);
-                Toast.makeText(OpenCVCamera.this, "Picture has been taken ", Toast.LENGTH_LONG).show();
-                Log.d(TAG, "Path " + outPicture);
+
             }
         });
     }
@@ -106,8 +102,15 @@ public class OpenCVCamera extends AppCompatActivity implements CameraBridgeViewB
 
         // Insert a new row for diagram in the database, returning the ID of that new row.
         Uri newUri = getContentResolver().insert(ERDiagramEntry.CONTENT_URI, values);
-        Toast.makeText(this, "image saved in db with id "+newUri.getPath(), Toast.LENGTH_SHORT).show();
+        openEditorActivity(newUri);
+    }
 
+    private void openEditorActivity(Uri uri) {
+        Intent intent = new Intent(TakeDiagramPicActivity.this, EditorActivity.class);
+        intent.setData(uri);
+
+        // Launch the {@link EditorActivity} to display the data for the current pet.
+        startActivity(intent);
     }
 
 

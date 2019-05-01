@@ -2,23 +2,24 @@ package com.example.david.ertosql;
 
 import android.Manifest;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 
-import com.example.david.ertosql.cameraAndImages.OpenCVCamera;
-import com.example.david.ertosql.data.ERDiagramContract;
 import com.example.david.ertosql.data.ERDiagramContract.ERDiagramEntry;
 import com.example.david.ertosql.data.ERDiagramsCursorAdapter;
 import com.karumi.dexter.Dexter;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements
             startButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent cvIntent = new Intent(MainActivity.this, OpenCVCamera.class);
+                    Intent cvIntent = new Intent(MainActivity.this, TakeDiagramPicActivity.class);
                     startActivity(cvIntent);
                 }
             });
@@ -93,31 +94,31 @@ public class MainActivity extends AppCompatActivity implements
             GridView gridView = (GridView)findViewById(R.id.gridview);
              mCursorAdapter = new ERDiagramsCursorAdapter(this, null);
             gridView.setAdapter(mCursorAdapter);
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(MainActivity.this, EditorActivity.class);
 
+                    // Form the content URI that represents the specific pet that was clicked on,
+                    // by appending the "id" (passed as input to this method) onto the
+                    // {@link PetEntry#CONTENT_URI}.
+                    // For example, the URI would be "content://com.example.android.pets/pets/2"
+                    // if the pet with ID 2 was clicked on.
+                    Uri currentPetUri = ContentUris.withAppendedId(ERDiagramEntry.CONTENT_URI, id);
+
+                    // Set the URI on the data field of the intent
+                    intent.setData(currentPetUri);
+
+                    // Launch the {@link EditorActivity} to display the data for the current pet.
+                    startActivity(intent);
+                }
+            });
             getLoaderManager().initLoader(DIAGRAMS_LOADER, null, this);
 
 
 
 
-            String[] projection = {
-                    ERDiagramEntry._ID,
-                    ERDiagramEntry.COLUMN_ERDIAGRAM_ORIGINAL_IMAGE,
-                    ERDiagramEntry.COLUMN_ERDIAGRAM_NAME,
-                    ERDiagramEntry.COLUMN_ERDIAGRAM_SQL_CODE,
-                    ERDiagramEntry.COLUMN_RELATIONAL_SCHEMA_IMAGE };
 
-            // Perform a query on the provider using the ContentResolver.
-            // Use the {@link PetEntry#CONTENT_URI} to access the pet data.
-            Cursor cursor = getContentResolver().query(
-                    ERDiagramEntry.CONTENT_URI,   // The content URI of the words table
-                    projection,             // The columns to return for each row
-                    null,                   // Selection criteria
-                    null,                   // Selection criteria
-                    null);
-
-            assert cursor != null;
-            Log.d(TAG,"the number of rows in the database is "+cursor.getCount());
-            cursor.close();
         }
 
 
