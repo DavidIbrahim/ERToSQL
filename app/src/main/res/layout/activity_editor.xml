@@ -15,7 +15,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/common_google_signin_btn_icon_dark" />
+        android:layout_margin="12dp"
+        tools:src="@raw/test_tuna" />
 
     <Button
         android:id="@+id/button_save"
@@ -50,7 +51,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="50dp"
         android:text="Diagram Title"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textColor="@color/colorCreamy"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/image_view_editor"
