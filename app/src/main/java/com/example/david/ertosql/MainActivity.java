@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements
     /**
      *  True for testing ImageProcessing class only
      */
-    private static final boolean  TESTING = false;
+    private static final boolean  TESTING = true;
     private static final String TAG= MainActivity.class.getSimpleName();
     private static final int DIAGRAMS_LOADER = 0;
     private   ERDiagramsCursorAdapter mCursorAdapter;
