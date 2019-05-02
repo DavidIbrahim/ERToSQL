@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="2dp"
     tools:context=".EditorActivity">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/image_view_editor"
@@ -18,31 +21,34 @@
         android:layout_margin="12dp"
         tools:src="@raw/test_tuna" />
 
-    <Button
-        android:id="@+id/button_save"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="126dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="16dp"
-        android:text="save"
-        android:textColor="@color/colorBlue"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/button_save"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="126dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginBottom="8dp"
+            android:text="save"
+            android:textColor="@color/colorBlue"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText_sql_code"
+            app:layout_constraintVertical_bias="1.0" />
 
-    <Button
-        android:id="@+id/button_cancel"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="16dp"
-        android:text="cancel"
-        android:textColor="@color/colorOrange"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <Button
+            android:id="@+id/button_cancel"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="28dp"
+            android:layout_marginBottom="8dp"
+            android:text="cancel"
+            android:textColor="@color/colorOrange"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/textView"
@@ -70,18 +76,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_view_editor" />
 
-    <EditText
-        android:id="@+id/editText_sql_code"
-        android:layout_width="match_parent"
-        android:layout_height="155dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:inputType="textCapSentences|textNoSuggestions|textMultiLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        tools:text="CREATE TABLE Department (
+        <EditText
+            android:id="@+id/editText_sql_code"
+            android:layout_width="match_parent"
+            android:layout_height="191dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="10dp"
+            android:inputType="textCapSentences|textNoSuggestions|textMultiLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            tools:text="CREATE TABLE Department (
 DepID INT,
 Name VARCHAR(255),
 Building No. VARCHAR(255),
@@ -99,5 +106,5 @@ PRIMARY KEY (DepID)
         app:layout_constraintStart_toEndOf="@+id/image_view_editor"
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:text="Untitled" />
-
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>
