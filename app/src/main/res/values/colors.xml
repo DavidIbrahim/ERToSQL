@@ -2,6 +2,7 @@
 <resources>
 
     <color name="colorSilver">#CACACE</color>
+    <color name="colorBlue">#4885ed</color>
     <color name="colorCreamy">#FF69B4</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
