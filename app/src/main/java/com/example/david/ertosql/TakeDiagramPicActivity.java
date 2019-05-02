@@ -26,6 +26,7 @@ import org.opencv.core.Mat;
 import java.io.IOException;
 
 import static com.example.david.ertosql.ImageProcessing.convertToBitmap;
+import static com.example.david.ertosql.ImageProcessing.highlightShapes;
 import static com.example.david.ertosql.data.ERDiagramContract.*;
 
 
@@ -36,7 +37,6 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
     private OpenCameraView cameraBridgeViewBase;
 
     private Mat colorRgba;
-    private Mat colorGray;
 
     private Mat des, forward;
 
@@ -70,27 +70,29 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
         cameraBridgeViewBase.setCvCameraViewListener(this);
         cameraBridgeViewBase.disableFpsMeter();
 
-
         ImageView takePictureBtn = (ImageView) findViewById(R.id.take_picture);
         takePictureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                cameraBridgeViewBase.setContext(v.getContext());
 
-                insertNewDiagram();
+
+                cameraBridgeViewBase.takePicture("x");
+                //insertNewDiagram();
 
 
             }
         });
     }
 
-    private void insertNewDiagram()   {
+ /*   private void insertNewDiagram()   {
         // Create database helper
 
 
         // Gets the database in write mode
-         /*String sqlCode = "  SELECT column1, column2 FROM table1, table2 WHERE column2='value';\n"+
-                 "SELECT * FROM Customers WHERE Last_Name=\'Smith';";*/
-        String sqlCode = ImageProcessing.getSQLcode(colorRgba,this);
+         String sqlCode = "  SELECT column1, column2 FROM table1, table2 WHERE column2='value';\n"+
+                 "SELECT * FROM Customers WHERE Last_Name=\'Smith';";
+      //String sqlCode = ImageProcessing.getSQLcode(colorRgba,this);
         ContentValues values = new ContentValues();
         try {
             values.put(ERDiagramEntry.COLUMN_ERDIAGRAM_ORIGINAL_IMAGE, DbBitMapUtility.getBytes(convertToBitmap(colorRgba)));
@@ -104,14 +106,7 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
         Uri newUri = getContentResolver().insert(ERDiagramEntry.CONTENT_URI, values);
         openEditorActivity(newUri);
     }
-
-    private void openEditorActivity(Uri uri) {
-        Intent intent = new Intent(TakeDiagramPicActivity.this, EditorActivity.class);
-        intent.setData(uri);
-        intent.putExtra("ParentActivity",TakeDiagramPicActivity.class.getSimpleName());
-        // Launch the {@link EditorActivity} to display the data for the current pet.
-        startActivity(intent);
-    }
+*/
 
 
     @Override
@@ -143,7 +138,6 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
     @Override
     public void onCameraViewStarted(int width, int height) {
         colorRgba = new Mat(height, width, CvType.CV_8UC4);
-        colorGray = new Mat(height, width, CvType.CV_8UC1);
 
         des = new Mat(height, width, CvType.CV_8UC4);
         forward = new Mat(height, width, CvType.CV_8UC4);
@@ -163,6 +157,7 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
         colorRgba = inputFrame.rgba();
         //todo sara
         preprocessor.changeImagePreviewOrientation(colorRgba, des, forward);
+        //highlightShapes(colorRgba);
         return colorRgba;
     }
 

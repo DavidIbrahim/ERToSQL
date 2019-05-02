@@ -117,7 +117,8 @@ public class ImageProcessing {
 
     }
 
-    public static void hilightShapes(Mat originalImage) {
+    public static void highlightShapes(Mat originalImage) {
+
         draw(originalImage);
       /*  Mat originalImageGrayScale=originalImage.clone();
         Imgproc.cvtColor(originalImageGrayScale,originalImageGrayScale,Imgproc.COLOR_RGB2GRAY);
