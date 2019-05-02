@@ -8,7 +8,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.EditText;
 
 import static com.example.david.ertosql.data.ERDiagramContract.*;
 

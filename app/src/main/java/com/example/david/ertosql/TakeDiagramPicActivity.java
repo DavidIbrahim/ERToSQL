@@ -11,13 +11,9 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.david.ertosql.cameraAndImages.OpenCameraView;
-import com.example.david.ertosql.cameraAndImages.utils.Constants;
-import com.example.david.ertosql.cameraAndImages.utils.FolderUtil;
 import com.example.david.ertosql.cameraAndImages.utils.ImagePreprocessor;
-import com.example.david.ertosql.cameraAndImages.utils.Utilities;
 import com.example.david.ertosql.data.DbBitMapUtility;
 
 import org.opencv.android.BaseLoaderCallback;
@@ -27,7 +23,6 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
-import java.io.File;
 import java.io.IOException;
 
 import static com.example.david.ertosql.ImageProcessing.convertToBitmap;
@@ -81,21 +76,26 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
             @Override
             public void onClick(View v) {
 
-                insertPic();
+                insertNewDiagram();
 
 
             }
         });
     }
 
-    private void insertPic()   {
+    private void insertNewDiagram()   {
         // Create database helper
 
+
         // Gets the database in write mode
+         /*String sqlCode = "  SELECT column1, column2 FROM table1, table2 WHERE column2='value';\n"+
+                 "SELECT * FROM Customers WHERE Last_Name=\'Smith';";*/
+        String sqlCode = ImageProcessing.getSQLcode(colorRgba,this);
         ContentValues values = new ContentValues();
         try {
             values.put(ERDiagramEntry.COLUMN_ERDIAGRAM_ORIGINAL_IMAGE, DbBitMapUtility.getBytes(convertToBitmap(colorRgba)));
             values.put(ERDiagramEntry.COLUMN_ERDIAGRAM_NAME,"Untitled");
+            values.put(ERDiagramEntry.COLUMN_ERDIAGRAM_SQL_CODE,sqlCode);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -108,7 +108,7 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
     private void openEditorActivity(Uri uri) {
         Intent intent = new Intent(TakeDiagramPicActivity.this, EditorActivity.class);
         intent.setData(uri);
-
+        intent.putExtra("ParentActivity",TakeDiagramPicActivity.class.getSimpleName());
         // Launch the {@link EditorActivity} to display the data for the current pet.
         startActivity(intent);
     }

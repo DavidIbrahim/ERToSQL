@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.david.ertosql.data.DbBitMapUtility;
-import com.example.david.ertosql.data.ERDiagramContract;
 
 import static com.example.david.ertosql.data.ERDiagramContract.*;
 
@@ -24,6 +23,7 @@ public class EditorActivity extends AppCompatActivity  implements
         LoaderManager.LoaderCallbacks<Cursor>  {
     /** Identifier for the Diagram data loader */
     private static final int EXISTING_DIAGRAM_LOADER = 0;
+    private String mParentActivity;
 
     private Uri mCurrentPetUri;
 
@@ -38,6 +38,7 @@ public class EditorActivity extends AppCompatActivity  implements
         setContentView(R.layout.activity_editor);
         Intent intent = getIntent();
         mCurrentPetUri = intent.getData();
+        mParentActivity = intent.getStringExtra("ParentActivity");
         imageView = findViewById(R.id.image_view_editor);
         buttonSave = findViewById(R.id.button_save);
         buttonCancel = findViewById(R.id.button_cancel);
@@ -48,6 +49,16 @@ public class EditorActivity extends AppCompatActivity  implements
             @Override
             public void onClick(View v) {
                 saveDiagram();
+                finish();
+            }
+        });
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mParentActivity != null &&mParentActivity.equals(TakeDiagramPicActivity.class.getSimpleName())){
+                    int rowsDeleted = getContentResolver().delete(mCurrentPetUri, null, null);
+                }
                 finish();
             }
         });
