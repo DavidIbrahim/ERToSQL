@@ -25,6 +25,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginBottom="16dp"
         android:text="save"
+        android:textColor="@color/colorBlue"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -37,7 +38,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="16dp"
         android:text="cancel"
-        android:textColor="@color/colorSilver"
+        android:textColor="@color/colorOrange"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -49,6 +50,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="50dp"
         android:text="Diagram Title"
+        android:textSize="20sp"
         android:textColor="@color/colorCreamy"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/image_view_editor"
