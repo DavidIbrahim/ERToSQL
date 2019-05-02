@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:columnWidth="180dp"
         android:gravity="center"
-        android:numColumns="auto_fit"
+        android:numColumns="2"
         android:stretchMode="spacingWidthUniform"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

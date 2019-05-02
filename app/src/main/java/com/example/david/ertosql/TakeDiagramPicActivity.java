@@ -14,8 +14,6 @@ import android.widget.ImageView;
 
 import com.example.david.ertosql.cameraAndImages.OpenCameraView;
 import com.example.david.ertosql.cameraAndImages.utils.ImagePreprocessor;
-import com.example.david.ertosql.data.DbBitMapUtility;
-
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
@@ -23,11 +21,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
-import java.io.IOException;
-
-import static com.example.david.ertosql.ImageProcessing.convertToBitmap;
 import static com.example.david.ertosql.ImageProcessing.highlightShapes;
-import static com.example.david.ertosql.data.ERDiagramContract.*;
 
 
 public class TakeDiagramPicActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
@@ -41,6 +35,9 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
     private Mat des, forward;
 
     private ImagePreprocessor preprocessor;
+    private ImageView imageViewSave;
+
+    private ImageView imageViewReOpenCamera;
 
     private BaseLoaderCallback baseLoaderCallback = new BaseLoaderCallback(this) {
         @Override
@@ -69,21 +66,51 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
         cameraBridgeViewBase.setVisibility(SurfaceView.VISIBLE);
         cameraBridgeViewBase.setCvCameraViewListener(this);
         cameraBridgeViewBase.disableFpsMeter();
+        cameraBridgeViewBase.setContext(this);
 
-        ImageView takePictureBtn = (ImageView) findViewById(R.id.take_picture);
+        imageViewReOpenCamera = findViewById(R.id.retake_image_view);
+        imageViewSave = findViewById(R.id.right_imageView);
+        imageViewSave.setVisibility(View.INVISIBLE);
+        imageViewReOpenCamera.setVisibility(View.INVISIBLE);
+
+        final ImageView takePictureBtn = (ImageView) findViewById(R.id.take_picture);
         takePictureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cameraBridgeViewBase.setContext(v.getContext());
 
-
+                takePictureBtn.setVisibility(View.INVISIBLE);
                 cameraBridgeViewBase.takePicture("x");
+                imageViewReOpenCamera.setVisibility(View.VISIBLE);
+                imageViewSave.setVisibility(View.VISIBLE);
                 //insertNewDiagram();
 
 
             }
         });
+        imageViewSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                cameraBridgeViewBase.saveImageAndOpenEditorActivity();
+                imageViewSave.setVisibility(View.INVISIBLE);
+                imageViewReOpenCamera.setVisibility(View.INVISIBLE);
+                takePictureBtn.setVisibility(View.VISIBLE);
+
+            }
+        });
+
+        imageViewReOpenCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePictureBtn.setVisibility(View.VISIBLE);
+
+                imageViewSave.setVisibility(View.INVISIBLE);
+                imageViewReOpenCamera.setVisibility(View.INVISIBLE);
+                cameraBridgeViewBase.resume();
+            }
+        });
     }
+
 
  /*   private void insertNewDiagram()   {
         // Create database helper
@@ -157,7 +184,7 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
         colorRgba = inputFrame.rgba();
         //todo sara
         preprocessor.changeImagePreviewOrientation(colorRgba, des, forward);
-        //highlightShapes(colorRgba);
+        highlightShapes(colorRgba);
         return colorRgba;
     }
 

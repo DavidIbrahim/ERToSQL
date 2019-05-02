@@ -94,17 +94,13 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
     @SuppressLint("WrongThread")
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
-        Log.i(TAG, "Saving a bitmap to file");
-        // The camera preview was automatically stopped. Start it again.
-        mCamera.startPreview();
-        mCamera.setPreviewCallback(this);
 
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 10;
         Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length,options);
 
         bm = rotate(bitmap, 90);
-        insertNewDiagram(bm);
+        //insertNewDiagram(bm);
         // Write the image in a file (in jpeg format)
      /*   try {
             FileOutputStream fos = new FileOutputStream(mPictureFileName);
@@ -117,6 +113,9 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
         }*/
     }
 
+    public   void saveImageAndOpenEditorActivity(){
+        insertNewDiagram(bm);
+    }
 
     private static Bitmap rotate(Bitmap bm, int rotation) {
         if (rotation != 0) {
@@ -147,8 +146,8 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
 
         // Insert a new row for diagram in the database, returning the ID of that new row.
         Uri newUri = context.getContentResolver().insert(ERDiagramContract.ERDiagramEntry.CONTENT_URI, values);
-     //   if(newUri!=null)
-        //openEditorActivity(newUri);
+       if(newUri!=null)
+        openEditorActivity(newUri);
     }
     public void openEditorActivity(Uri uri) {
         Intent intent = new Intent(context, EditorActivity.class);
@@ -159,4 +158,9 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
 
     }
 
+    public void resume() {
+        // The camera preview was automatically stopped. Start it again.
+        mCamera.startPreview();
+        mCamera.setPreviewCallback(this);
+    }
 }
