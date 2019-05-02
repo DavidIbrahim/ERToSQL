@@ -10,7 +10,7 @@
         android:layout_width="180dp"
         android:layout_height="180dp"
         android:padding="2dp"
-        tools:src="@raw/testTuna2" />
+        tools:src="@raw/test_tuna_2" />
     <TextView
         android:id="@+id/text_view_diagram_name"
         android:layout_width="wrap_content"
