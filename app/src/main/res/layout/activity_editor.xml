@@ -11,10 +11,9 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/common_google_signin_btn_icon_dark" />
@@ -52,43 +51,52 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:text="Diagram Title"
-        app:layout_constraintEnd_toStartOf="@+id/editText_diagram_name"
-        app:layout_constraintHorizontal_bias="0.054"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.701"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="SQl Code"
-        app:layout_constraintEnd_toStartOf="@+id/editText_sql_code"
-        app:layout_constraintHorizontal_bias="0.285"
+        android:textColor="@color/colorAccent"
+        android:textSize="25sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_diagram_name" />
+        app:layout_constraintTop_toBottomOf="@+id/image_view_editor" />
 
     <EditText
         android:id="@+id/editText_sql_code"
-        android:layout_width="276dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="4dp"
+        android:layout_width="375dp"
+        android:layout_height="155dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:inputType="textCapSentences|textNoSuggestions|textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText_diagram_name"
-        tools:text="CREAKDNAKDJKD DJKDJAKDJKD AJKDJAKJDAKJJDKJDDJHD" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:text="CREATE TABLE Department (
+DepID INT,
+Name VARCHAR(255),
+Building No. VARCHAR(255),
+PRIMARY KEY (DepID)
+);" />
 
 
     <EditText
         android:id="@+id/editText_diagram_name"
         android:layout_width="155dp"
         android:layout_height="43dp"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="16dp"
         android:inputType="textCapSentences|textNoSuggestions|textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
