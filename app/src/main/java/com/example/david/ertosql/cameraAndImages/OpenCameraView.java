@@ -146,8 +146,9 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
 
 
         // Gets the database in write mode
-        String sqlCode = "  SELECT column1, column2 FROM table1, table2 WHERE column2='value';\n"+
-                "SELECT * FROM Customers WHERE Last_Name=\'Smith';";
+       /* String sqlCode = "  SELECT column1, column2 FROM table1, table2 WHERE column2='value';\n"+
+                "SELECT * FROM Customers WHERE Last_Name=\'Smith';";*/
+       String sqlCode=ImageProcessing.getSQLcode(mMat,context);
 
         /*Mat mat = new Mat();
         Utils.bitmapToMat(data,mat);*/

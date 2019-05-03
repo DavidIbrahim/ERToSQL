@@ -471,7 +471,7 @@ public class ImageProcessing {
             double disty = abs(vertices[0].y - vertices[2].y);
             //  Log.d("kam wa7d_x", String.valueOf(distx));
             // Log.d("kam wa7d_y", String.valueOf(disty));
-            if (distx > 3 * disty && disty != 0)
+            if (distx > 2 * disty && disty != 0)
                 rep = true;
 
         }
@@ -482,7 +482,7 @@ public class ImageProcessing {
 
     private static ArrayList<ERLine> getLines(Mat src, Mat tocamera) {
         ArrayList<ERLine> erLine = new ArrayList<>();
-        //  Imgproc.dilate(src,src,Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT,new Size(5,5)));
+          Imgproc.dilate(src,src,Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT,new Size(5,5)));
         List<MatOfPoint> contour = new ArrayList<>();
         List<RotatedRect> minrec = new ArrayList<>(contour.size());
         Imgproc.findContours(src, contour, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
@@ -497,7 +497,7 @@ public class ImageProcessing {
         for (MatOfPoint2f cnt : newContours) {
 
             RotatedRect rec = minAreaRect(cnt);
-            if (rec.size.area() > 1000 && rec.angle != 0) {
+            if (rec.size.area() > 200) {
                 Point[] vertices = new Point[4];
                 rec.points(vertices);
 
