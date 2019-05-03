@@ -19,7 +19,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="12dp"
-        tools:src="@raw/test_tuna" />
+        android:background="@drawable/shape_square"
+        android:padding="4dp"
+        tools:src="@raw/test_tuna_2" />
 
         <Button
             android:id="@+id/button_save"
