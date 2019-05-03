@@ -486,7 +486,7 @@ public class ImageProcessing {
 
     private static ArrayList<ERLine> getLines(Mat src, Mat tocamera) {
         ArrayList<ERLine> erLine = new ArrayList<>();
-          Imgproc.dilate(src,src,Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT,new Size(5,5)));
+        //  Imgproc.dilate(src,src,Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT,new Size(5,5)));
         List<MatOfPoint> contour = new ArrayList<>();
         List<RotatedRect> minrec = new ArrayList<>(contour.size());
         Imgproc.findContours(src, contour, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_NONE);
@@ -579,9 +579,10 @@ public class ImageProcessing {
             }
         }
         textRecognizer.release();
-        Log.d(TAG,"Detected string first method is :"+sb.toString());
         String text = sb.toString();
         text = text.replaceAll("[^A-Za-z0-9]","");
+
+        Log.d(TAG,"Detected string first method is :"+text);
 
         return text;
     }
@@ -675,7 +676,7 @@ public class ImageProcessing {
                 if (((ERElipse) connect).isUnderLined()) {
                     ArrayList<ERShape.ERShapeWZCenter> tempe = new ArrayList<>();
                     tempe.add(connect);
-                    uni.put(minrec, tempe);
+                     uni.put(minrec, tempe);
 
                 } else if (!atrr.containsKey(minrec)) {
                     ArrayList<ERShape.ERShapeWZCenter> tempe = new ArrayList<>();
@@ -725,11 +726,11 @@ public class ImageProcessing {
                     //  erAttributes.add(new ERAttribute(atrr.get(REC.get(j)).get(i).getText()));
                 }
             }
-            if(!uni.isEmpty())
-            erAttributesuni.add(new ERAttribute(uni.get(REC.get(j)).get(0).getText()));
+           /* if(!uni.isEmpty())
+                erAttributesuni.add(new ERAttribute(uni.get(REC.get(j)).get(0).getText()));*/
 
-
-            EREntity E = new EREntity(REC.get(j).getText(), erAttributesuni, erAttributes);
+             ArrayList<ERAttribute> u=new ArrayList();
+            EREntity E = new EREntity(REC.get(j).getText(), u, erAttributes);
             erEntities.add(E);
         }
 
