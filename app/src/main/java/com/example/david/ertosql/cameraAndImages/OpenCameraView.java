@@ -40,9 +40,13 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
     public Bitmap bm;
     private Context context;
     private ImageView mImageView;
+    private ImageView imageViewReOpen;
+    private ImageView imageViewSave;
 
-    public void setContext(Context context) {
+    public void setContext(Context context, ImageView imageViewReOpenCamera, ImageView imageViewSave) {
         this.context = context;
+        imageViewReOpen = imageViewReOpenCamera;
+        this.imageViewSave = imageViewSave;
 
     }
 
@@ -111,6 +115,8 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
         Utils.matToBitmap(mat,bitmap);
         mImageView.setImageBitmap(convertToBitmap(mat));
         mImageView.setVisibility(VISIBLE);
+        imageViewReOpen.setVisibility(VISIBLE);
+        imageViewSave.setVisibility(VISIBLE);
 
       /*  Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
         bm = rotate(bitmap, 90);
