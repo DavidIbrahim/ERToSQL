@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Scroller;
 import android.widget.Toast;
 
 import com.example.david.ertosql.data.DbBitMapUtility;
@@ -55,6 +57,7 @@ public class EditorActivity extends AppCompatActivity implements
         buttonSave = findViewById(R.id.button_save);
         buttonCancel = findViewById(R.id.button_cancel);
         editTextSql = findViewById(R.id.editText_sql_code);
+        editTextSql.setMovementMethod(new ScrollingMovementMethod());
         editTextTitle = findViewById(R.id.editText_diagram_name);
         getLoaderManager().initLoader(EXISTING_DIAGRAM_LOADER, null, this);
         buttonSave.setOnClickListener(new View.OnClickListener() {

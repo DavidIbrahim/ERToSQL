@@ -2,6 +2,8 @@ package com.example.david.ertosql.data;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,10 +37,14 @@ public class ERDiagramsCursorAdapter extends CursorAdapter {
             int nameColumnIndex = cursor.getColumnIndex(ERDiagramEntry.COLUMN_ERDIAGRAM_NAME);
             int originalImageColumnIndex = cursor.getColumnIndex(ERDiagramEntry.COLUMN_ERDIAGRAM_ORIGINAL_IMAGE);
             // Read the pet attributes from the Cursor for the current pet
+
             String diagramTitle = cursor.getString(nameColumnIndex);
             byte[] originalImage = cursor.getBlob(originalImageColumnIndex);
-            imageView.setImageBitmap(getImage(originalImage));
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray(originalImage, 0, originalImage.length);
+            imageView.setImageBitmap(bitmap);
            nameTextView.setText(diagramTitle);
+
         }
     }
 }

@@ -3,6 +3,7 @@ package com.example.david.ertosql;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -181,6 +182,7 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
 
         des = new Mat(height, width, CvType.CV_8UC4);
         forward = new Mat(height, width, CvType.CV_8UC4);
+      cameraBridgeViewBase.resume();
     }
 
 
