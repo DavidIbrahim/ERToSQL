@@ -11,6 +11,7 @@ import android.hardware.Camera;
 import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.example.david.ertosql.EditorActivity;
 import com.example.david.ertosql.ImageProcessing;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static com.example.david.ertosql.ImageProcessing.convertToBitmap;
+import static com.example.david.ertosql.ImageProcessing.highlightShapes;
 
 
 public class OpenCameraView extends JavaCameraView implements Camera.PictureCallback {
@@ -37,9 +39,11 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
     public static int minWidthQuality = 400;
     public Bitmap bm;
     private Context context;
+    private ImageView mImageView;
 
     public void setContext(Context context) {
         this.context = context;
+
     }
 
     public OpenCameraView(Context context, AttributeSet attrs) {
@@ -87,11 +91,9 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
     }
 
 
-    public void takePicture(final String fileName) {
-        Log.i(TAG, "Taking picture");
-        this.mPictureFileName = fileName;
+    public void takePicture(final ImageView imageView) {
+        mImageView = imageView;
         mCamera.setPreviewCallback(null);
-
         mCamera.takePicture(null, null, this);
     }
 
@@ -102,6 +104,14 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
 
 
         mMat = TakeDiagramPicActivity.getColorRgba();
+        Mat mat = new Mat();
+        mMat.copyTo(mat);
+        highlightShapes(mat);
+        Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(mat,bitmap);
+        mImageView.setImageBitmap(convertToBitmap(mat));
+        mImageView.setVisibility(VISIBLE);
+
       /*  Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
         bm = rotate(bitmap, 90);
       */  //insertNewDiagram(bm);
@@ -144,17 +154,17 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
         long startTime = System.currentTimeMillis();
         Log.d(TAG,"begin highlighting : ");
 
-        ImageProcessing.highlightShapes(mMat);
         long endTime   = System.currentTimeMillis();
         Log.d(TAG,"time of highlighting : " + (endTime-startTime));
         //Utils.matToBitmap(mat,data);
-        Bitmap bitmap = convertToBitmap(mMat);
-        byte[] array = null;
+        Bitmap bitmap = Bitmap.createBitmap(mMat.cols(), mMat.rows(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(mMat, bitmap);
+      /*  byte[] array = null;
         try {
            array = DbBitMapUtility.getBytes(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
 
 
@@ -188,5 +198,10 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
         // The camera preview was automatically stopped. Start it again.
         mCamera.startPreview();
         mCamera.setPreviewCallback(this);
+        Camera.Parameters params = mCamera.getParameters();
+//*EDIT*//params.setFocusMode("continuous-picture");
+//It is better to use defined constraints as opposed to String, thanks to AbdelHady
+        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        mCamera.setParameters(params);
     }
 }

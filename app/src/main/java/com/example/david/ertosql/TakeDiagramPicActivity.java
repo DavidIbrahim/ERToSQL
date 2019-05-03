@@ -32,7 +32,7 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
 
     private static Mat colorRgba;
 
-
+    private  ImageView imageViewPreview;
 
     private Mat des, forward;
 
@@ -47,6 +47,7 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
             switch (status) {
                 case LoaderCallbackInterface.SUCCESS:
                     cameraBridgeViewBase.enableView();
+
                     break;
                 default:
                     super.onManagerConnected(status);
@@ -72,18 +73,21 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
 
         imageViewReOpenCamera = findViewById(R.id.retake_image_view);
         imageViewSave = findViewById(R.id.right_imageView);
+        imageViewPreview = findViewById(R.id.imagePreview);
+
         imageViewSave.setVisibility(View.INVISIBLE);
         imageViewReOpenCamera.setVisibility(View.INVISIBLE);
-
+        imageViewPreview.setVisibility(View.INVISIBLE);
         final ImageView takePictureBtn = (ImageView) findViewById(R.id.take_picture);
         takePictureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 takePictureBtn.setVisibility(View.INVISIBLE);
-                cameraBridgeViewBase.takePicture("x");
+                cameraBridgeViewBase.takePicture(imageViewPreview);
                 imageViewReOpenCamera.setVisibility(View.VISIBLE);
                 imageViewSave.setVisibility(View.VISIBLE);
+
                 //insertNewDiagram();
 
 
@@ -96,6 +100,8 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
                 cameraBridgeViewBase.saveImageAndOpenEditorActivity();
                 imageViewSave.setVisibility(View.INVISIBLE);
                 imageViewReOpenCamera.setVisibility(View.INVISIBLE);
+                imageViewPreview.setVisibility(View.INVISIBLE);
+
                 takePictureBtn.setVisibility(View.VISIBLE);
 
             }
@@ -107,6 +113,8 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
                 takePictureBtn.setVisibility(View.VISIBLE);
 
                 imageViewSave.setVisibility(View.INVISIBLE);
+                imageViewPreview.setVisibility(View.INVISIBLE);
+
                 imageViewReOpenCamera.setVisibility(View.INVISIBLE);
                 cameraBridgeViewBase.resume();
             }
@@ -189,7 +197,7 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
         colorRgba = inputFrame.rgba();
         //todo sara
         preprocessor.changeImagePreviewOrientation(colorRgba, des, forward);
-       highlightShapes(colorRgba);
+       //highlightShapes(colorRgba);
         return colorRgba;
     }
 
