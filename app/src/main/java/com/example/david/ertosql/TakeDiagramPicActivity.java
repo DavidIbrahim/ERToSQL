@@ -30,7 +30,9 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
 
     private OpenCameraView cameraBridgeViewBase;
 
-    private Mat colorRgba;
+    private static Mat colorRgba;
+
+
 
     private Mat des, forward;
 
@@ -126,7 +128,8 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
             values.put(ERDiagramEntry.COLUMN_ERDIAGRAM_NAME,"Untitled");
             values.put(ERDiagramEntry.COLUMN_ERDIAGRAM_SQL_CODE,sqlCode);
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackT
+            race();
         }
 
         // Insert a new row for diagram in the database, returning the ID of that new row.
@@ -135,7 +138,9 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
     }
 */
 
-
+    public static Mat getColorRgba() {
+        return colorRgba;
+    }
     @Override
     public void onPause() {
         super.onPause();
@@ -175,7 +180,7 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
     public void onCameraViewStopped() {
         Log.d(TAG, "onCameraViewStopped");
 
-        colorRgba.release();
+        //colorRgba.release();
     }
 
 
@@ -184,7 +189,7 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
         colorRgba = inputFrame.rgba();
         //todo sara
         preprocessor.changeImagePreviewOrientation(colorRgba, des, forward);
-        highlightShapes(colorRgba);
+       highlightShapes(colorRgba);
         return colorRgba;
     }
 

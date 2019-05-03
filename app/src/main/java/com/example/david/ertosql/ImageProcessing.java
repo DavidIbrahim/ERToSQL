@@ -256,7 +256,7 @@ public class ImageProcessing {
             context) {
         //copy image
 
-        // Mat img = mat.clone();
+        // Mat img = mMat.clone();
         Mat img = mat;
         ArrayList<ERRectangle> erRectangles = new ArrayList<>();
 
@@ -391,7 +391,7 @@ public class ImageProcessing {
                 Log.d("ellipse-primary", String.valueOf(flag));
 
                 //  if(flag)
-                // putText(mat,"c",new Point(rec.x +(rec.width / 2), rec.y + (rec.height / 2)),2,2,new Scalar(200,200,200),4);
+                // putText(mMat,"c",new Point(rec.x +(rec.width / 2), rec.y + (rec.height / 2)),2,2,new Scalar(200,200,200),4);
             }
         }
         for (int j = 0; j < c.size(); j++) {
@@ -546,7 +546,7 @@ public class ImageProcessing {
     public static Mat loadTestPic(Context context, int testPicID) {
         Mat mat = null;
         try {
-            // load the image in grey scale and save it in mat ..... change pic1 for different resource
+            // load the image in grey scale and save it in mMat ..... change pic1 for different resource
             mat = Utils.loadResource(context, testPicID, Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
         } catch (IOException e) {
             e.printStackTrace();
@@ -554,7 +554,7 @@ public class ImageProcessing {
         return mat;
     }
 
-    static Bitmap convertToBitmap(Mat mat) {
+    public static Bitmap convertToBitmap(Mat mat) {
         Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.ARGB_8888);
         Utils.matToBitmap(mat, bitmap);
         return bitmap;
@@ -562,7 +562,7 @@ public class ImageProcessing {
 
     private static ERShape.ERShapeWZCenter min_disrance_rectangle(ERLine
                                                                           line, ArrayList<ERRectangle> rec) {
-        ERShape.ERShapeWZCenter min = rec.get(0);
+         ERShape.ERShapeWZCenter min = rec.get(0);
         double mind = line.calculateDistance(rec.get(0));
         for (int i = 1; i < rec.size(); i++) {
             double temp = line.calculateDistance(rec.get(i));

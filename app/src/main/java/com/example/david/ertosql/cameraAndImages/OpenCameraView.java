@@ -13,14 +13,19 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import com.example.david.ertosql.EditorActivity;
+import com.example.david.ertosql.ImageProcessing;
 import com.example.david.ertosql.TakeDiagramPicActivity;
 import com.example.david.ertosql.data.DbBitMapUtility;
 import com.example.david.ertosql.data.ERDiagramContract;
 
 import org.opencv.android.JavaCameraView;
+import org.opencv.android.Utils;
+import org.opencv.core.Mat;
 
 import java.io.IOException;
 import java.util.List;
+
+import static com.example.david.ertosql.ImageProcessing.convertToBitmap;
 
 
 public class OpenCameraView extends JavaCameraView implements Camera.PictureCallback {
@@ -28,7 +33,7 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
     private static final String TAG = OpenCameraView.class.getSimpleName();
 
     private String mPictureFileName;
-
+    public Mat mMat;
     public static int minWidthQuality = 400;
     public Bitmap bm;
     private Context context;
@@ -95,12 +100,11 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
     @Override
     public void onPictureTaken(byte[] data, Camera camera) {
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 10;
-        Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length,options);
 
+        mMat = TakeDiagramPicActivity.getColorRgba();
+      /*  Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
         bm = rotate(bitmap, 90);
-        //insertNewDiagram(bm);
+      */  //insertNewDiagram(bm);
         // Write the image in a file (in jpeg format)
      /*   try {
             FileOutputStream fos = new FileOutputStream(mPictureFileName);
@@ -113,7 +117,7 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
         }*/
     }
 
-    public   void saveImageAndOpenEditorActivity(){
+    public void saveImageAndOpenEditorActivity() {
         insertNewDiagram(bm);
     }
 
@@ -127,32 +131,54 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
         return bm;
     }
 
-    private void insertNewDiagram(Bitmap data)   {
+    private void insertNewDiagram(Bitmap data) {
         // Create database helper
 
 
         // Gets the database in write mode
         String sqlCode = "  SELECT column1, column2 FROM table1, table2 WHERE column2='value';\n"+
                 "SELECT * FROM Customers WHERE Last_Name=\'Smith';";
-        //String sqlCode = ImageProcessing.getSQLcode(colorRgba,this);
-        ContentValues values = new ContentValues();
+
+        /*Mat mat = new Mat();
+        Utils.bitmapToMat(data,mat);*/
+        long startTime = System.currentTimeMillis();
+        Log.d(TAG,"begin highlighting : ");
+
+        ImageProcessing.highlightShapes(mMat);
+        long endTime   = System.currentTimeMillis();
+        Log.d(TAG,"time of highlighting : " + (endTime-startTime));
+        //Utils.matToBitmap(mat,data);
+        Bitmap bitmap = convertToBitmap(mMat);
+        byte[] array = null;
         try {
-            values.put(ERDiagramContract.ERDiagramEntry.COLUMN_ERDIAGRAM_ORIGINAL_IMAGE, DbBitMapUtility.getBytes(data));
+           array = DbBitMapUtility.getBytes(bitmap);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        values.put(ERDiagramContract.ERDiagramEntry.COLUMN_ERDIAGRAM_NAME,"Untitled");
-        values.put(ERDiagramContract.ERDiagramEntry.COLUMN_ERDIAGRAM_SQL_CODE,sqlCode);
+
+
+
+
+        /* String sqlCode = ImageProcessing.getSQLcode(mMat, context);*/
+        ContentValues values = new ContentValues();
+        try {
+            values.put(ERDiagramContract.ERDiagramEntry.COLUMN_ERDIAGRAM_ORIGINAL_IMAGE, DbBitMapUtility.getBytes(bitmap));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        values.put(ERDiagramContract.ERDiagramEntry.COLUMN_ERDIAGRAM_NAME, "Untitled");
+        values.put(ERDiagramContract.ERDiagramEntry.COLUMN_ERDIAGRAM_SQL_CODE, sqlCode);
 
         // Insert a new row for diagram in the database, returning the ID of that new row.
         Uri newUri = context.getContentResolver().insert(ERDiagramContract.ERDiagramEntry.CONTENT_URI, values);
-       if(newUri!=null)
-        openEditorActivity(newUri);
+        if (newUri != null)
+            openEditorActivity(newUri);
     }
+
     public void openEditorActivity(Uri uri) {
         Intent intent = new Intent(context, EditorActivity.class);
         intent.setData(uri);
-        intent.putExtra("ParentActivity",TakeDiagramPicActivity.class.getSimpleName());
+        intent.putExtra("ParentActivity", TakeDiagramPicActivity.class.getSimpleName());
         // Launch the {@link EditorActivity} to display the data for the current pet.
         context.startActivity(intent);
 
