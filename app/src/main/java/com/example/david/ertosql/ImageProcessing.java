@@ -2,10 +2,12 @@ package com.example.david.ertosql;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.nfc.Tag;
 import android.os.CountDownTimer;
 import android.util.SparseArray;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.david.ertosql.ERObjects.ERAttribute;
 import com.example.david.ertosql.ERObjects.ERBinaryRelationship;
@@ -15,6 +17,7 @@ import com.example.david.ertosql.ERObjects.EREntity;
 import com.example.david.ertosql.ERObjects.ERRelationship;
 import com.example.david.ertosql.er.shapes.ERElipse;
 import com.example.david.ertosql.er.shapes.ERLine;
+import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
@@ -57,6 +60,7 @@ import static org.opencv.imgproc.Imgproc.minAreaRect;
 import static org.opencv.imgproc.Imgproc.putText;
 
 public class ImageProcessing {
+    private static final String TAG = ImageProcessing.class.getSimpleName();
 
     private static Context mContext = null;
     private static Mat mOriginalImage = null;
@@ -326,7 +330,7 @@ public class ImageProcessing {
                 //
                 Imgproc.fillPoly(img, Collections.singletonList(cnt), black);
                 count++;
-                Log.d("rectangle-text", text);
+                Log.d(TAG, "rectangle-text :"+text);
                 // Imgproc.putText(img,"sara",p,2,2,white,2);
             }
 
@@ -387,7 +391,7 @@ public class ImageProcessing {
                 count++;
 
                 c.add(cnt);
-                Log.d("ellipse-text", text);
+                Log.d(TAG, "ellipse-text :"+text);
                 Log.d("ellipse-primary", String.valueOf(flag));
 
                 //  if(flag)
@@ -436,7 +440,7 @@ public class ImageProcessing {
                 ERRhombus e = new ERRhombus(center, text);
                 erRhombuses.add(e);
                 c.add(cnt);
-                Log.d("rhombus-text", text);
+                Log.d(TAG, "rohmbus-text :"+text);
 
             }
 
@@ -471,7 +475,7 @@ public class ImageProcessing {
             double disty = abs(vertices[0].y - vertices[2].y);
             //  Log.d("kam wa7d_x", String.valueOf(distx));
             // Log.d("kam wa7d_y", String.valueOf(disty));
-            if (distx > 2 * disty && disty != 0)
+            if (distx > 2.5* disty && disty != 0)
                 rep = true;
 
         }
@@ -526,13 +530,47 @@ public class ImageProcessing {
     //method to show the detected lines
 
 
-    private static String getStringFromImage(Mat mat, Context c) {
+    public static String getStringFromImage(Mat mat, Context c) {
         StringBuilder sb = new StringBuilder();
-        Bitmap bitmap = convertToBitmap(mat);
+        Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(mat, bitmap);
+
         TextRecognizer textRecognizer = new TextRecognizer.Builder(c).build();
         if (!textRecognizer.isOperational()) {
+            Log.d(TAG,"Dependencies are downloading....try after few moment");
             return "couldn't get Text!";
         } else {
+           /* textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
+                @Override
+                public void release() {
+
+                }
+
+                @Override
+                public void receiveDetections(Detector.Detections<TextBlock> detections) {
+                    SparseArray<TextBlock> items =detections.getDetectedItems();
+                    if (items.size() <= 0) {
+                        return ;
+                    }
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < items.size(); i++) {
+                        TextBlock item = items.valueAt(i);
+                        sb.append(item.getValue());
+                        Log.d(TAG,"Detected string 2nd method is :");
+
+                    }
+
+                }
+            });
+            textRecognizer.*/
+
+
+
+
+
+
+
+
             Frame frame = new Frame.Builder().setBitmap(bitmap).build();
             SparseArray<TextBlock> text = textRecognizer.detect(frame);
             for (int i = 0; i < text.size(); i++) {
@@ -540,7 +578,12 @@ public class ImageProcessing {
                 sb.append(item.getValue());
             }
         }
-        return sb.toString();
+        textRecognizer.release();
+        Log.d(TAG,"Detected string first method is :"+sb.toString());
+        String text = sb.toString();
+        text = text.replaceAll("[^A-Za-z0-9]","");
+
+        return text;
     }
 
     public static Mat loadTestPic(Context context, int testPicID) {
@@ -599,7 +642,7 @@ public class ImageProcessing {
 
     private static ERDiagram merge() {
 
-        Mat pic = mOriginalImage;
+        Mat pic = mOriginalImage.clone();
         Imgproc.cvtColor(pic,pic, Imgproc.COLOR_RGB2GRAY);
         Mat to_Rhombus = new Mat();
         Mat copy_original = pic.clone();
@@ -682,7 +725,7 @@ public class ImageProcessing {
                     //  erAttributes.add(new ERAttribute(atrr.get(REC.get(j)).get(i).getText()));
                 }
             }
-
+            if(!uni.isEmpty())
             erAttributesuni.add(new ERAttribute(uni.get(REC.get(j)).get(0).getText()));
 
 
@@ -730,9 +773,9 @@ public class ImageProcessing {
           Log.d("test", atr.toString());
           break;
       }*/
-        tocamera.assignTo(pic);
+       // tocamera.assignTo(pic);
         String sqltest = getSQLFromDiagram(erDiagram);
-        Log.d("SQLTEST", sqltest);
+        Log.d(TAG, "SQL-Code :"+sqltest);
         return erDiagram;
     }
 

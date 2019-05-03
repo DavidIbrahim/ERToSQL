@@ -141,6 +141,7 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
         return bm;
     }
 
+
     private void insertNewDiagram(Bitmap data) {
         // Create database helper
 
@@ -149,6 +150,7 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
        /* String sqlCode = "  SELECT column1, column2 FROM table1, table2 WHERE column2='value';\n"+
                 "SELECT * FROM Customers WHERE Last_Name=\'Smith';";*/
        String sqlCode=ImageProcessing.getSQLcode(mMat,context);
+
 
         /*Mat mat = new Mat();
         Utils.bitmapToMat(data,mat);*/
@@ -203,6 +205,9 @@ public class OpenCameraView extends JavaCameraView implements Camera.PictureCall
 //*EDIT*//params.setFocusMode("continuous-picture");
 //It is better to use defined constraints as opposed to String, thanks to AbdelHady
         params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        params.setPreviewFpsRange(30000, 30000);
+
         mCamera.setParameters(params);
+
     }
 }

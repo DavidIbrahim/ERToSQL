@@ -22,6 +22,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+import static com.example.david.ertosql.ImageProcessing.getStringFromImage;
 import static com.example.david.ertosql.ImageProcessing.highlightShapes;
 
 
@@ -197,8 +198,10 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         colorRgba = inputFrame.rgba();
+        System.out.println("height is : "+colorRgba.height()+ "- width is: "+colorRgba.width());
         //todo sara
         preprocessor.changeImagePreviewOrientation(colorRgba, des, forward);
+         //getStringFromImage(colorRgba ,this);
        //highlightShapes(colorRgba);
         return colorRgba;
     }
