@@ -13,13 +13,13 @@ It can also be useful in education systems to both students and instructors.
 * Martina Ihab Fouad
 ## Usage
 You can get your code through 5 Steps:
-###1- Draw
+### 1- Draw
 Draw a neat SQL Diagram containing a relationship between two entities, and the entities attributes (unique or regular)
-###2- Capture
+### 2- Capture
 Capture your diagram.
-###3- Check
+### 3- Check
 The captured photo will show the recognised ER shapes.
-###4- Confirm
+### 4- Confirm
 If your photo is not captured correctly or not recognised, you can capture it again. Otherwise, save it.
-###5- Modify
+### 5- Modify
 The last step is naming your diagram and altering with the data types in the SQL diagram. You can also delete your diagram when you're finished.
