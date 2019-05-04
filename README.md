@@ -9,7 +9,7 @@ It can also be useful in education systems to both students and instructors.
 * David Ibrahim Salama
 * Sara Samy Ayad
 * Kirollos Sherif Wadie
-* Rameez Barakat Hamze
+* Rameez Barakat Hamza
 * Martina Ihab Fouad
 ## Usage
 You can get your code through 5 Steps:
