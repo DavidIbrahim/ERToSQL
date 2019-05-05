@@ -121,18 +121,15 @@ public class ImageProcessing {
 
     }
 
+    /**
+     * highlight all shapes
+     *
+     * @param originalImage
+     */
     public static void highlightShapes(Mat originalImage) {
 
         draw(originalImage);
-      /*  Mat originalImageGrayScale=originalImage.clone();
-        Imgproc.cvtColor(originalImageGrayScale,originalImageGrayScale,Imgproc.COLOR_RGB2GRAY);
-        Mat to_Rhombus=new Mat();
-        Mat copy_original=originalImageGrayScale.clone();
-        Mat tocamera=originalImage;
-      // Imgproc.cvtColor(tocamera,tocamera,Imgproc.COLOR_GRAY2RGB);
-        ArrayList<ERRectangle> lines = getRectangles(originalImageGrayScale,tocamera);
-        ArrayList<ERElipse> elipses=getEllipse(copy_original,originalImageGrayScale,to_Rhombus,tocamera);
-        ArrayList<ERRhombus> erRhombuses=getRhombus(copy_original,originalImageGrayScale,to_Rhombus,tocamera);*/
+
 
     }
 
@@ -144,6 +141,11 @@ public class ImageProcessing {
 
     }
 
+    /**
+     * contour all shapes with different colores
+     *
+     * @param orig
+     */
     public static void draw(Mat orig) {
         Mat threshold = new Mat();
 
@@ -197,7 +199,7 @@ public class ImageProcessing {
         //
         Imgproc.erode(img, img, Kernel);
 
-        //for ellipse
+        //for ellipse&&rohmbus
         Mat imge = new Mat();
         Mat kernele = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(15, 15));
         Imgproc.morphologyEx(img, imge, MORPH_OPEN, kernele);
@@ -242,6 +244,7 @@ public class ImageProcessing {
         for (int j = 0; j < cr.size(); j++) {
             Imgproc.drawContours(orig, cr, j, new Scalar(0, 255, 0), 5);
         }
+        //for lines
         ArrayList<ERLine> erLine = getLines(img, ma);
         for (int i = 0; i < erLine.size(); i++) {
             Imgproc.line(orig, new Point(erLine.get(i).get_start().x, erLine.get(i).get_start().y), new Point(erLine.get(i).get_end().x, erLine.get(i).get_end().y), new Scalar(100, 200, 200), 3, Imgproc.LINE_AA, 0);
@@ -330,7 +333,7 @@ public class ImageProcessing {
                 //
                 Imgproc.fillPoly(img, Collections.singletonList(cnt), black);
                 count++;
-                Log.d(TAG, "rectangle-text :"+text);
+                Log.d(TAG, "rectangle-text :" + text);
                 // Imgproc.putText(img,"sara",p,2,2,white,2);
             }
 
@@ -344,6 +347,16 @@ public class ImageProcessing {
         Imgproc.erode(img, img, Kernel);
         return erRectangles;
     }
+
+    /**
+     *
+     * @param orig //original image
+     * @param mat //dosent contain recangle
+     * @param to_rhombus //dosent contain elipse or rectangle
+     * @param tocamera //colored image
+     * @param context
+     * @return array list contain all ellipse
+     */
 
     public static ArrayList<ERElipse> getEllipse(Mat orig, Mat mat, Mat to_rhombus, Mat tocamera, Context context) {
 
@@ -391,7 +404,7 @@ public class ImageProcessing {
                 count++;
 
                 c.add(cnt);
-                Log.d(TAG, "ellipse-text :"+text);
+                Log.d(TAG, "ellipse-text :" + text);
                 Log.d("ellipse-primary", String.valueOf(flag));
 
                 //  if(flag)
@@ -406,6 +419,16 @@ public class ImageProcessing {
         img.assignTo(to_rhombus);
         return erElipses;
     }
+
+    /**
+     *
+     * @param orig //original image to get th text
+     * @param mat //contain image without rectangle
+     * @param from_ellipse //contain image without rectangle or ellipse
+     * @param tocamera //colored image
+     * @param context
+     * @return array list conatin rhombus
+     */
 
     public static ArrayList<ERRhombus> getRhombus(Mat orig, Mat mat, Mat from_ellipse, Mat tocamera, Context context) {
         ArrayList<ERRhombus> erRhombuses = new ArrayList<>();
@@ -440,7 +463,7 @@ public class ImageProcessing {
                 ERRhombus e = new ERRhombus(center, text);
                 erRhombuses.add(e);
                 c.add(cnt);
-                Log.d(TAG, "rohmbus-text :"+text);
+                Log.d(TAG, "rohmbus-text :" + text);
 
             }
 
@@ -453,6 +476,11 @@ public class ImageProcessing {
 
     }
 
+    /**
+     *
+     * @param src
+     * @return true if there has a horizontal line
+     */
     public static Boolean there_is_line(Mat src) //function to know whether there is any line or not
     {
 
@@ -475,7 +503,7 @@ public class ImageProcessing {
             double disty = abs(vertices[0].y - vertices[2].y);
             //  Log.d("kam wa7d_x", String.valueOf(distx));
             // Log.d("kam wa7d_y", String.valueOf(disty));
-            if (distx > 2.5* disty && disty != 0)
+            if (distx > 2.5 * disty && disty != 0)
                 rep = true;
 
         }
@@ -484,6 +512,12 @@ public class ImageProcessing {
         // return ! src.empty();
     }
 
+    /**
+     *
+     * @param src //imag contain only lines
+     * @param tocamera //colored image
+     * @return array list contain lines
+     */
     private static ArrayList<ERLine> getLines(Mat src, Mat tocamera) {
         ArrayList<ERLine> erLine = new ArrayList<>();
         //  Imgproc.dilate(src,src,Imgproc.getStructuringElement(Imgproc.CV_SHAPE_RECT,new Size(5,5)));
@@ -529,7 +563,12 @@ public class ImageProcessing {
 
     //method to show the detected lines
 
-
+    /**
+     *
+     * @param mat
+     * @param c
+     * @return string contain the word
+     */
     public static String getStringFromImage(Mat mat, Context c) {
         StringBuilder sb = new StringBuilder();
         Bitmap bitmap = Bitmap.createBitmap(mat.cols(), mat.rows(), Bitmap.Config.RGB_565);
@@ -537,7 +576,7 @@ public class ImageProcessing {
 
         TextRecognizer textRecognizer = new TextRecognizer.Builder(c).build();
         if (!textRecognizer.isOperational()) {
-            Log.d(TAG,"Dependencies are downloading....try after few moment");
+            Log.d(TAG, "Dependencies are downloading....try after few moment");
             return "couldn't get Text!";
         } else {
            /* textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
@@ -565,12 +604,6 @@ public class ImageProcessing {
             textRecognizer.*/
 
 
-
-
-
-
-
-
             Frame frame = new Frame.Builder().setBitmap(bitmap).build();
             SparseArray<TextBlock> text = textRecognizer.detect(frame);
             for (int i = 0; i < text.size(); i++) {
@@ -580,9 +613,9 @@ public class ImageProcessing {
         }
         textRecognizer.release();
         String text = sb.toString();
-        text = text.replaceAll("[^A-Za-z0-9]","");
+        text = text.replaceAll("[^A-Za-z0-9]", "");
 
-        Log.d(TAG,"Detected string first method is :"+text);
+        Log.d(TAG, "Detected string first method is :" + text);
 
         return text;
     }
@@ -604,9 +637,14 @@ public class ImageProcessing {
         return bitmap;
     }
 
-    private static ERShape.ERShapeWZCenter min_disrance_rectangle(ERLine
-                                                                          line, ArrayList<ERRectangle> rec) {
-         ERShape.ERShapeWZCenter min = rec.get(0);
+    /**
+     *
+     * @param line
+     * @param rec
+     * @return the nearest rectangle to this line
+     */
+    private static ERShape.ERShapeWZCenter min_disrance_rectangle(ERLine line, ArrayList<ERRectangle> rec) {
+        ERShape.ERShapeWZCenter min = rec.get(0);
         double mind = line.calculateDistance(rec.get(0));
         for (int i = 1; i < rec.size(); i++) {
             double temp = line.calculateDistance(rec.get(i));
@@ -619,6 +657,13 @@ public class ImageProcessing {
         return min;
     }
 
+    /**
+     *
+     * @param line
+     * @param elipses
+     * @param rhom
+     * @return the nearest elipse or rhobus from line
+     */
     private static ERShape.ERShapeWZCenter min_distance_shapes(ERLine
                                                                        line, ArrayList<ERElipse> elipses, ArrayList<ERRhombus> rhom) {
         ERShape.ERShapeWZCenter min = elipses.get(0);
@@ -640,11 +685,15 @@ public class ImageProcessing {
         return min;
     }
 
-
+    /**
+     * merge all shapes with erdiagram and connect all shapes together
+     *
+     * @return ERdiagram
+     */
     private static ERDiagram merge() {
 
         Mat pic = mOriginalImage.clone();
-        Imgproc.cvtColor(pic,pic, Imgproc.COLOR_RGB2GRAY);
+        Imgproc.cvtColor(pic, pic, Imgproc.COLOR_RGB2GRAY);
         Mat to_Rhombus = new Mat();
         Mat copy_original = pic.clone();
         Mat tocamera = pic.clone();
@@ -656,19 +705,17 @@ public class ImageProcessing {
         for (int i = 0; i < rec.size(); i++) {
             REC.add(rec.get(i));
         }
+        //represent shapes
         ArrayList<ERElipse> elipses = getEllipse(copy_original, pic, to_Rhombus, tocamera, mContext);
         ArrayList<ERRhombus> erRhombuses = getRhombus(copy_original, pic, to_Rhombus, tocamera, mContext);
         ArrayList<ERLine> lines = getLines(pic, tocamera);
-        //      ERShape.ERPoint s=new ERShape.ERPoint(2598.00020960769,975.0001876281872);
-        //    ERShape.ERPoint e=new ERShape.ERPoint(2757.24637242356,940.9694168640003);
-        //  ERLine copyLine=new ERLine(s,e);
-        //lines.add(copyLine);
-        //Log.d("lines", lines.toString());
+        //make a hashmap to connect shapes
         Map<ERShape.ERShapeWZCenter, ArrayList<ERShape.ERShapeWZCenter>> atrr = new HashMap<>();
         Map<ERShape.ERShapeWZCenter, ArrayList<ERShape.ERShapeWZCenter>> relation = new HashMap<>();
         Map<ERShape.ERShapeWZCenter, ArrayList<ERShape.ERShapeWZCenter>> uni = new HashMap<>();
         ArrayList<ERShape.ERShapeWZCenter> totale = new ArrayList<>();
         Map<ERShape.ERShapeWZCenter, ArrayList<ERShape.ERShapeWZCenter>> tot = new HashMap<>();
+        //connect shapes
         for (int i = 0; i < lines.size(); i++) {
             ERShape.ERShapeWZCenter minrec = min_disrance_rectangle(lines.get(i), rec);
             ERShape.ERShapeWZCenter connect = min_distance_shapes(lines.get(i), elipses, erRhombuses);
@@ -676,9 +723,10 @@ public class ImageProcessing {
                 if (((ERElipse) connect).isUnderLined()) {
                     ArrayList<ERShape.ERShapeWZCenter> tempe = new ArrayList<>();
                     tempe.add(connect);
-                     uni.put(minrec, tempe);
+                    uni.put(minrec, tempe);
 
-                } else if (!atrr.containsKey(minrec)) {
+                }
+                if (!atrr.containsKey(minrec)) {
                     ArrayList<ERShape.ERShapeWZCenter> tempe = new ArrayList<>();
                     tempe.add(connect);
                     atrr.put(minrec, tempe);
@@ -710,6 +758,7 @@ public class ImageProcessing {
 
         }
         Log.d("test tot", tot.toString());
+        //make relation and entity using shapes
         ArrayList<ERRelationship> erRelationships = new ArrayList<>();
         ArrayList<EREntity> erEntities = new ArrayList<>();
         // ArrayList<ERAttribute> erAttributes=new ArrayList<>();
@@ -729,7 +778,7 @@ public class ImageProcessing {
            /* if(!uni.isEmpty())
                 erAttributesuni.add(new ERAttribute(uni.get(REC.get(j)).get(0).getText()));*/
 
-             ArrayList<ERAttribute> u=new ArrayList();
+            ArrayList<ERAttribute> u = new ArrayList();
             EREntity E = new EREntity(REC.get(j).getText(), u, erAttributes);
             erEntities.add(E);
         }
@@ -774,15 +823,20 @@ public class ImageProcessing {
           Log.d("test", atr.toString());
           break;
       }*/
-       // tocamera.assignTo(pic);
+        // tocamera.assignTo(pic);
         String sqltest = getSQLFromDiagram(erDiagram);
-        Log.d(TAG, "SQL-Code :"+sqltest);
+        Log.d(TAG, "SQL-Code :" + sqltest);
         return erDiagram;
     }
 
+    /**
+     * @param mat
+     * @param context
+     * @return string containg sql code
+     */
     public static String getSQLcode(Mat mat, Context context) {
         mOriginalImage = mat;
-        mContext=context;
+        mContext = context;
         ERDiagram erDiagram = merge();
         String sqltest = getSQLFromDiagram(erDiagram);
         return sqltest;
