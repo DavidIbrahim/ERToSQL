@@ -1,16 +1,24 @@
 # ERToSQL
 
+## Content
+- [Usage](#usage)
+- [Why use ERtoSQL?](#why-use-ertosql)
+- [Algorithms](#algorithms)
+- [What are the Challenges we faced?](#what-are-the-challenges-we-faced)
+- [What would we like to do in the future?](#what-would-we-like-to-do-in-the-future)
+- [Our Team](#our-team)
 ## Project Description
 Our android app makes defining a database easier by transforming hand-sketched ER diagrams into SQL code.
 You capture the ERD, confirm it and modify the resultant SQL code.
 It saves the time and effort of manually creating the database or building computerized diagrams to obtain the code.
 It can also be useful in education systems to both students and instructors.
 ## Our Team
-* David Ibrahim Salama
-* Sara Samy Ayad
-* Kirollos Sherif Wadie
-* Rameez Barakat Hamza
-* Martina Ihab Fouad
+* [David Ibrahim Salama](https://github.com/DavidIbrahim)
+* [Sara Samy Ayad](https://github.com/SaraSamyAyad)
+* [Kirollos Sherif Wadie](https://github.com/KirollosWadie)
+* [Rameez Barakat Hamza](https://github.com/Rameez-Barakat)
+* [Martina Ihab Fouad](https://github.com/martinaihab)
+
 ## Usage
 You can get your code through 5 Steps:
 ### 1- Draw
@@ -103,6 +111,10 @@ get the center and cut it from original image to get text from ocr)
 2- Produce a relational schema figure
 
 3- Improve our text detection and image processing algorithm
+
+
+
+
 
 
           
