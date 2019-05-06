@@ -5,7 +5,7 @@ Our android app makes defining a database easier by transforming hand-sketched E
 You capture the ERD, confirm it and modify the resultant SQL code.
 It saves the time and effort of manually creating the database or building computerized diagrams to obtain the code.
 It can also be useful in education systems to both students and instructors.
-## Our team
+## Our Team
 * David Ibrahim Salama
 * Sara Samy Ayad
 * Kirollos Sherif Wadie
@@ -50,8 +50,41 @@ The last step is naming your diagram and altering with the data types in the SQL
           ii- Only processes the image with the highest resolution once at the beginning
 
 And saves the output SQL code with the low resolution of the image
+## Algorithms
+### A- Image Processing:
+1- Transform image to gray-scale
 
-## What are the challenges we faced?
+2- Make some threshold
+
+3- Make a morph-open operation with a rectangle kernel to detect rectangle:
+(using contour function and count the vertices if th contour has 4 v it is a rectangle;
+get the center and cut it from original image to get text from ocr)
+
+4- Remove rectangle
+
+5- Make a morph-open operation with a ellipse kernel to detect ellipse
+(using contour function and count the vertices if th contour has more than 9 v it is an ellipse;
+get the center and cut it from original image to get text from ocr)
+
+6-Remove ellipse 
+
+7- Detect rhombus
+(using contour function and count the vertices if th contour has between 4-6 v it is a rhombus;
+get the center and cut it from original image to get text from ocr)
+
+8- Detect lines (using contour for all line  and insert them in rotating rectangle ,get the four corner of rectangle to detect start and end point of line)
+
+9- A method loops over lines to identify what shapes they connect and it saves the shapes, at both ends of the line, in a hashmap
+
+10- A method loops over the shapes hashmap to create the objects; ERAttributes inside EREntities, and ERRelationships between EREntities
+### B-SQL Conversion:
+1- After detecting all shapes, we create an ERDiagram object, containing relationships between entities.
+
+2- The RSMapper(Relational Schema Mapper) transforms the ERDiagram into ERRelationalSchema consisting of tables, depending on the type of relationship. The tables may contain unique attributes, primary keys, foreign keys, and other regular columns.
+
+3- The SQLMapper, then, transforms the ERRelationalSchema to a String that contains the SQL commands.
+
+## What are the Challenges we faced?
 #### 1- Differentiating between lines, and rectangles or rhombuses
 
           We detect rectangles and rhombuses first and erase them from the image
