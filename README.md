@@ -39,4 +39,40 @@ The last step is naming your diagram and altering with the data types in the SQL
 
 ![ERtoSQL-modify](https://user-images.githubusercontent.com/33926255/57222593-6ef0d300-7003-11e9-950c-e4d1975a9dc3.png)
 
+## Why use ERtoSQL?
+1- An easy-to-use app (Great UX!)
+
+2- Database implemented with content provider to allow sharing data with other apps in the future
+
+3 - Our App handles memory efficiently
+          
+          i- Uses cursor provider with Grid View for better use of RAM
+          ii- Only processes the image with the highest resolution once at the beginning
+
+And saves the output SQL code with the low resolution of the image
+
+## What are the challenges we faced?
+#### 1- Differentiating between lines, and rectangles or rhombuses
+
+          We detect rectangles and rhombuses first and erase them from the image
+          After that we detect the lines
+#### 2- Shapes aren't perfectly detected due to noise
+
+          That’s why we let the user confirm it first
+          We highlight the shapes for the user 
+          And let him verify it for us
+#### 3- OCR doesn't perfectly detect the text
+          We allow the user to edit the output SQL code
+#### 4- Designing the project taking into consideration the future work
+## What would we like to do in the future?
+1- Share the output with other apps
+
+2- Produce a relational schema figure
+
+3- Improve our text detection and image processing algorithm
+
+
+          
+
+       
 
