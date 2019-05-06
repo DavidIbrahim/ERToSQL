@@ -36,9 +36,11 @@ public class SQLMapper {
         for (int i = 0; i <attributes.size(); i++) {
             SQLTable.append("\n");
             if (primaryKeys.contains(attributes.get(i))) {
-                SQLTable.append(attributes.get(i).getTitle() + " " + "INT" + ",");
+                // if attribute is primary key make default type INT and add not null constraint.
+                SQLTable.append(attributes.get(i).getTitle() + " " + "INT" +" NOT NULL"+ ",");
             }
             else {
+                // if attribute isn't a primary key make default type VARCHAR
                 SQLTable.append(attributes.get(i).getTitle() + " " + defaultAttributeType + ",");
             }
         }
