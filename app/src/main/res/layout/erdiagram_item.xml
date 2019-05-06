@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="wrap_content"
+   >
+
+    <ImageView
+        android:id="@+id/image_view_diagram_image"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:padding="2dp"
+        tools:src="@raw/test_tuna_2" />
+    <TextView
+        android:id="@+id/text_view_diagram_name"
+        android:layout_width="wrap_content"
+        android:textSize="25sp"
+        android:textColor="@color/colorSilver"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        tools:text="David"/>
+
+</LinearLayout>

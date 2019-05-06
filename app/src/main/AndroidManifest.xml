@@ -27,7 +27,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".cameraAndImages.OpenCVCamera"></activity>
+        <activity android:name=".EditorActivity"></activity>
+        <activity android:name=".TakeDiagramPicActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +39,12 @@
 
         <meta-data
             android:name="com.google.android.gms.vision.DEPENDENCIES"
-            android:value="orc" />
+            android:value="ocr" />
+
+        <provider
+            android:name=".data.ERDiagramProvider"
+            android:authorities="com.example.david.ertosql"
+            android:exported="false" />
     </application>
 
 </manifest>

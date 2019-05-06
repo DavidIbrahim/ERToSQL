@@ -1,11 +1,39 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- AppCompat Attributes -->
+        <item name="colorPrimary">@color/material_orange_500</item>
+        <item name="colorPrimaryDark">@color/material_orange_700</item>
+        <item name="colorAccent">@color/material_orange_a700</item>
+
+        <!-- AppCompat Control Attributes -->
+        <!-- Other control states (not in this example)
+        <item name="colorButtonNormal">@color/material_orange_500</item>
+        <item name="colorControlNormal">@color/material_orange_500</item>
+        <item name="colorControlActivated">@color/material_orange_500</item>
+        <item name="colorControlHighlight">@color/selector_orange_pressed</item>
+        -->
+
+        <!-- AppCompat Dialog Attributes -->
+        <item name="dialogTheme">@style/AppTheme.Dialog.Orange</item>
+        <item name="alertDialogTheme">@style/AppTheme.Dialog.Alert.Orange</item>
+    </style>
+
+    <!-- Orange Dialog Theme -->
+    <style name="AppTheme.Dialog.Orange" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorPrimary">@color/material_orange_500</item>
+        <item name="colorPrimaryDark">@color/material_orange_700</item>
+        <item name="colorAccent">@color/material_orange_a700</item>
+    </style>
+
+    <!-- Orange Alert Dialog Theme -->
+    <style name="AppTheme.Dialog.Alert.Orange" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/material_orange_500</item>
+        <item name="colorPrimaryDark">@color/material_orange_700</item>
+        <item name="colorAccent">@color/material_orange_a700</item>
     </style>
 
 </resources>

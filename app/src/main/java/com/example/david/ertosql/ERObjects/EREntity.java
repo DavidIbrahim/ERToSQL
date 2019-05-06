@@ -3,10 +3,42 @@ package com.example.david.ertosql.ERObjects;
 import java.util.ArrayList;
 
 public class EREntity {
-    String title;
+   String title;
     Type type;
     ArrayList<ERAttribute> uniqueAttributes;
     ArrayList<ERAttribute> entityAttributes;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    public ArrayList<ERAttribute> getUniqueAttributes() {
+        return uniqueAttributes;
+    }
+
+    public void setUniqueAttributes(ArrayList<ERAttribute> uniqueAttributes) {
+        this.uniqueAttributes = uniqueAttributes;
+    }
+
+    public ArrayList<ERAttribute> getEntityAttributes() {
+        return entityAttributes;
+    }
+
+    public void setEntityAttributes(ArrayList<ERAttribute> entityAttributes) {
+        this.entityAttributes = entityAttributes;
+    }
 
     public EREntity(String title, ArrayList<ERAttribute> uniqueAttributes, ArrayList<ERAttribute> entityAttributes) {
         this.title = title;
@@ -24,13 +56,15 @@ public class EREntity {
     }
 
     public ArrayList<ERAttribute> getKey(){
-        //todo: modify keys later
+        ArrayList<ERAttribute> key = new ArrayList<>();
         if (uniqueAttributes.isEmpty()){
-            ArrayList<ERAttribute> keys = new ArrayList<>();
-            keys.add(new ERAttribute(title+"ID"));
-            return keys;
+            key.add(new ERAttribute(title+"ID"));
         }
-        return uniqueAttributes;
+        //todo: modify keys later (contains ID)
+        else {
+            key.add(uniqueAttributes.get(0));
+        }
+        return key;
     }
 
     @Override

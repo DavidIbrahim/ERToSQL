@@ -9,7 +9,7 @@
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
     android:paddingTop="0dp"
-    tools:context=".cameraAndImages.OpenCVCamera">
+    tools:context=".TakeDiagramPicActivity">
 
     <com.example.david.ertosql.cameraAndImages.OpenCameraView
         android:layout_width="match_parent"
@@ -18,13 +18,54 @@
         android:id="@+id/camera_view"
         opencv:show_fps="true"
         opencv:camera_id="any"/>
-
     <ImageView
-        android:id="@+id/take_picture"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginBottom="24dp"
-        android:contentDescription="@string/app_name"
-        android:layout_gravity="center|bottom"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:id="@+id/imagePreview"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/right_imageView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center|bottom"
+            android:layout_marginTop="29dp"
+            android:layout_marginEnd="34dp"
+            android:layout_marginBottom="24dp"
+            android:layout_toStartOf="@+id/take_picture"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_done_black_24dp" />
+
+        <ImageView
+            android:id="@+id/take_picture"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="24dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_camera_alt_black_24dp" />
+
+        <ImageView
+            android:id="@+id/retake_image_view"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center|bottom"
+            android:layout_marginTop="29dp"
+            android:layout_marginStart="34dp"
+            android:layout_marginBottom="24dp"
+            android:layout_toEndOf="@+id/take_picture"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_autorenew_black_24dp" />
+    </RelativeLayout>
 
 </FrameLayout>
