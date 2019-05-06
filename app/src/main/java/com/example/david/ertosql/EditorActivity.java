@@ -10,24 +10,20 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Scroller;
 import android.widget.Toast;
 
 import com.example.david.ertosql.data.DbBitMapUtility;
 
-import java.io.IOException;
-
-import static com.example.david.ertosql.data.ERDiagramContract.*;
+import static com.example.david.ertosql.data.ERDiagramContract.ERDiagramEntry;
 
 public class EditorActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
@@ -53,6 +49,7 @@ public class EditorActivity extends AppCompatActivity implements
         Intent intent = getIntent();
         mCurrentPetUri = intent.getData();
         mParentActivity = intent.getStringExtra("ParentActivity");
+        setTitle("Editor");
         imageView = findViewById(R.id.image_view_editor);
         buttonSave = findViewById(R.id.button_save);
         buttonCancel = findViewById(R.id.button_cancel);

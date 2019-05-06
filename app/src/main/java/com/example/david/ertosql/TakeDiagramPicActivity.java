@@ -1,10 +1,6 @@
 package com.example.david.ertosql;
 
 
-import android.content.ContentValues;
-import android.content.Intent;
-import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,15 +11,13 @@ import android.widget.ImageView;
 
 import com.example.david.ertosql.cameraAndImages.OpenCameraView;
 import com.example.david.ertosql.cameraAndImages.utils.ImagePreprocessor;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-
-import static com.example.david.ertosql.ImageProcessing.getStringFromImage;
-import static com.example.david.ertosql.ImageProcessing.highlightShapes;
 
 
 public class TakeDiagramPicActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
@@ -62,7 +56,7 @@ public class TakeDiagramPicActivity extends AppCompatActivity implements CameraB
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setTitle("Capture Diagram");
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_open_cvcamera);
 
