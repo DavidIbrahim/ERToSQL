@@ -2,11 +2,11 @@
 
 ## Content
 - [Usage](#usage)
+- [Our Team](#our-team)
 - [Why use ERtoSQL?](#why-use-ertosql)
 - [Algorithms](#algorithms)
 - [What are the Challenges we faced?](#what-are-the-challenges-we-faced)
 - [What would we like to do in the future?](#what-would-we-like-to-do-in-the-future)
-- [Our Team](#our-team)
 ## Project Description
 Our android app makes defining a database easier by transforming hand-sketched ER diagrams into SQL code.
 You capture the ERD, confirm it and modify the resultant SQL code.
@@ -55,9 +55,7 @@ The last step is naming your diagram and altering with the data types in the SQL
 3 - Our App handles memory efficiently
           
           i- Uses cursor provider with Grid View for better use of RAM
-          ii- Only processes the image with the highest resolution once at the beginning
-
-And saves the output SQL code with the low resolution of the image
+          ii- Only processes the image with the highest resolution once at the beginning and saves the output SQL code with the low resolution of the image
 ## Algorithms
 ### A- Image Processing:
 1- Transform image to gray-scale
@@ -111,6 +109,12 @@ get the center and cut it from original image to get text from ocr)
 2- Produce a relational schema figure
 
 3- Improve our text detection and image processing algorithm
+
+
+
+
+
+### You can check the video to watch our live application [Here](https://www.facebook.com/kiro.wadie/videos/10215915202087735/)
 
 
 
